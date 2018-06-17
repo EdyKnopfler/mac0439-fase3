@@ -3,6 +3,8 @@ from usuarios.models import Usuario, PF, PJ
 from django.contrib import messages
 from django.shortcuts import render, redirect
 from eadopt.mongo import conectar_mongo
+from bson.objectid import ObjectId
+import django.utils.formats as fmt
 
 def login(request):
     return render(request, 'login.html')
@@ -36,27 +38,8 @@ def novo(request):
 
 
 def criar(request):
-    if request.POST['tipo'] == 'pf':
-        novo_usuario = PF()
-        novo_usuario.cpf = request.POST['cpf']
-        novo_usuario.data_nascimento = request.POST['data_nascimento']
-    else:
-        novo_usuario = PJ()
-        novo_usuario.cnpj = request.POST['cnpj']
-    
-    novo_usuario.nome = request.POST['nome']
-    novo_usuario.email = request.POST['email']
-    novo_usuario.senha = request.POST['senha']
-    novo_usuario.rua = request.POST['rua']
-    novo_usuario.bairro = request.POST['bairro']
-    novo_usuario.cidade = request.POST['cidade']
-    novo_usuario.estado = request.POST['estado']
-    novo_usuario.cep = request.POST['cep']
-    novo_usuario.telefone = request.POST['telefone']
-    novo_usuario.latitude = request.POST['latitude']
-    novo_usuario.longitude = request.POST['longitude']
-
-
+    novo_usuario = preencher(request)
+    novo_usuario.save()
     db = conectar_mongo()
     sitedb = db.usuarios
     resultado = sitedb.insert_one({
@@ -69,16 +52,72 @@ def criar(request):
     set_session(request, novo_usuario)
     return redirect('index')
 
+
 def editar(request):
-    if (request.session['tipo'] == "PF"):
+    if (request.session['tipo'] == "pf"):
         usuario = PF.objects.get(id=request.session["usuario_id"])
     else: 
         usuario = PJ.objects.get(id=request.session["usuario_id"])
    
+    doc = conectar_mongo().usuarios.find_one({"_id": ObjectId(request.session['usuario_mongo_id'])})
+    return render(request, 'editar.html', {"usuario":usuario, "descricao": doc['descricao']})
 
-    return render(request, 'editar.html', {"usuario":usuario})
+
+def atualizar(request):
+    usuario_editado = preencher(request)
+    usuario_editado.id = request.session['usuario_id']
+    usuario_editado.save()
+    conectar_mongo().usuarios.update_one({"_id": ObjectId(request.session['usuario_mongo_id'])}, {
+        "$set": {'descricao': request.POST['descricao']}
+    })
+    return redirect('index')
+
 
 def set_session(request, usuario):
     request.session['usuario_id'] = usuario.id
     request.session['usuario_mongo_id'] = usuario.id_mongo
     request.session['tipo'] = usuario.tipo
+
+
+def preencher(request):
+    if 'tipo' in request.session:
+        tipo = request.session['tipo']
+    else:
+        tipo = request.POST['tipo']
+        
+    if tipo == 'pf':
+        usuario = PF()
+        usuario.cpf = request.POST['cpf']
+        if request.POST['data_nascimento'] != '':
+            usuario.data_nascimento = request.POST['data_nascimento']
+        else:
+            usuario.data_nascimento = None
+    else:
+        usuario = PJ()
+        usuario.cnpj = request.POST['cnpj']
+    
+    usuario.tipo = tipo
+    usuario.nome = request.POST['nome']
+    usuario.email = request.POST['email']
+    usuario.senha = request.POST['senha']
+    usuario.rua = request.POST['rua']
+    usuario.bairro = request.POST['bairro']
+    usuario.cidade = request.POST['cidade']
+    usuario.estado = request.POST['estado']
+    usuario.cep = request.POST['cep']
+    usuario.telefone = request.POST['telefone']
+    
+    try:
+        latitude = float(request.POST['latitude'].replace(fmt.get_format("DECIMAL_SEPARATOR"), '.'))
+    except:
+        latitude = 0
+    
+    try:
+        longitude = float(request.POST['longitude'].replace(fmt.get_format("DECIMAL_SEPARATOR"), '.'))
+    except:
+        longitude = 0
+    
+    usuario.latitude = latitude
+    usuario.longitude = longitude
+    
+    return usuario

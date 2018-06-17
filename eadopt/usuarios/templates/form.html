@@ -1,84 +1,108 @@
+{% load l10n %}
 {% csrf_token %}
-             
-             <p>
-             Nome: <br>
-             <input type="text" name="nome" maxlength="80" value="{{usuario.nome}}">
-             </p>
-             
-             <p>
-             E-mail: <br>
-             <input type="text" name="email" maxlength="80" value="{{usuario.email}}" >
-             </p>
-             
-             <p>
-             Senha: <br>
-             <input type="password" name="senha" maxlength="20" value="{{usuario.senha}}">
-             </p>
-             
-             <p>
-             Rua: <br>
-             <input type="text" name="rua" maxlength="80" value="{{usuario.rua}}">
-             </p>
-             
-             <p>
-             Bairro: <br>
-             <input type="text" name="bairro" maxlength="80" value="{{usuario.bairro}}">
-             </p>
-             
-             <p>
-             Cidade: <br>
-             <input type="text" name="cidade" maxlength="80" value="{{usuario.cidade}}">
-             </p>
-             
-             <p>
-             Estado: <br>
-             <input type="text" name="estado" maxlength="2" value="{{usuario.estado}}">
-             </p>
-             
-             <p>
-             CEP: <br>
-             <input type="text" name="cep" maxlength="8" value="{{usuario.cep}}">
-             </p>
-             
-             <p>
-             Telefone: <br>
-             <input type="text" name="telefone" maxlength="11" value="{{usuario.telefone}}">
-             </p>
-             
-             <p>
-             Lat.: <input type="text" name="latitude" value="{{usuario.latitude}}"> / 
-             Long: <input type="text" name="longitude" value="{{usuario.longitude}}">
-             </p>
-             
-             <p>
-             Tipo: <br>
-             <select name="tipo">
-                <option value="pf">Pessoa física</option>
-                <option value="pj">Pessoa jurídica</option>
-             </select>
-             </p>
-             
-             {% if usuario.tipo == 'PF' %}
-             <p>
-             CPF: <br>
-             <input type="text" name="cpf" maxlength="11" value="{{usuario.cpf}}">
-             </p>
-      
+ 
+ <p>
+ Nome: <br>
+ <input type="text" name="nome" maxlength="80" value="{{usuario.nome}}">
+ </p>
+ 
+ <p>
+ E-mail: <br>
+ <input type="text" name="email" maxlength="80" value="{{usuario.email}}" >
+ </p>
+ 
+ <p>
+ Senha: <br>
+ <input type="password" name="senha" maxlength="20" value="{{usuario.senha}}">
+ </p>
+ 
+ <p>
+ Rua: <br>
+ <input type="text" name="rua" maxlength="80" value="{{usuario.rua}}">
+ </p>
+ 
+ <p>
+ Bairro: <br>
+ <input type="text" name="bairro" maxlength="80" value="{{usuario.bairro}}">
+ </p>
+ 
+ <p>
+ Cidade: <br>
+ <input type="text" name="cidade" maxlength="80" value="{{usuario.cidade}}">
+ </p>
+ 
+ <p>
+ Estado: <br>
+ <input type="text" name="estado" maxlength="2" value="{{usuario.estado}}">
+ </p>
+ 
+ <p>
+ CEP: <br>
+ <input type="text" name="cep" maxlength="8" value="{{usuario.cep}}">
+ </p>
+ 
+ <p>
+ Telefone: <br>
+ <input type="text" name="telefone" maxlength="11" value="{{usuario.telefone}}">
+ </p>
+ 
+ <p>
+ Lat.: <input type="text" name="latitude" value="{{usuario.latitude}}"> / 
+ Long: <input type="text" name="longitude" value="{{usuario.longitude}}">
+ </p>
+ 
+ {% if not usuario.id %}
+ <p>
+ Tipo: <br>
+ <select name="tipo" id="tipo">
+    <option value="pf">Pessoa física</option>
+    <option value="pj">Pessoa jurídica</option>
+ </select>
+ </p>
+ {% endif %}
+ 
+ {% if not usuario.id or usuario.tipo == 'pf' %}
+ <div id="pf">
+ <p>
+ CPF: <br>
+ <input type="text" name="cpf" maxlength="11" value="{{usuario.cpf}}">
+ </p>
 
-             <p>
-             Data de nascimento: <br>
-             <input type="date" name="data_nascimento" value="{{usuario.data_nascimento}}">
-             </p>
-             {% endif %} 
+ <p>
+ Data de nascimento: <br>
+ <input type="date" name="data_nascimento" value="{{usuario.data_nascimento|unlocalize}}">
+ </p>
+ </div>
+ {% endif %} 
 
-             {% if usuario.tipo == 'PJ' %}
-             <p>
-             CNPJ: <br>
-             <input type="text" name="cnpj" maxlength="14" value="{{usuario.cnpj}}">
-             </p>
-             {% endif %} 
+ {% if not usuario.id or usuario.tipo == 'pj' %}
+ <div id="pj">
+ <p>
+ CNPJ: <br>
+ <input type="text" name="cnpj" maxlength="14" value="{{usuario.cnpj}}">
+ </p>
+ </div>
+ {% endif %} 
 
-             <p>
-             Descriçõ: <br>
-             <textarea name="descricao"></textarea>
-             </p>
+ <p>
+ Descrição: <br>
+ <textarea name="descricao">{{descricao}}</textarea>
+ </p>
+
+<script>
+    $(document).ready(function() {
+    
+        $("#tipo").change(function() {
+            var tipo = $(this).val();
+            if (tipo == "pf") {
+                $("#pf").show();
+                $("#pj").hide();
+            }
+            else {
+                $("#pj").show();
+                $("#pf").hide();
+            }
+        }).change();
+    
+    });
+</script>

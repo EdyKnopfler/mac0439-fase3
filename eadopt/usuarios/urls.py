@@ -9,6 +9,6 @@ urlpatterns = [
     url(r'^novo/$', views.novo, name='usuario_novo'),
     url(r'^criar/$', views.criar, name='usuario_criar'),
     url(r'^editar/$', views.editar, name='usuario_editar'),
-    #url(r'^atualizar/$', views.update, name='usuario_update'),
+    url(r'^atualizar/$', views.atualizar, name='usuario_atualizar'),
     #url(r'^remover/$', views.delete, name='usuario_remover')
 ]
