@@ -32,6 +32,7 @@ ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [
 
+    'autenticacao',
     'usuarios.apps.UsuariosConfig',
     
     #'django.contrib.admin',
@@ -50,6 +51,9 @@ MIDDLEWARE = [
     #'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    
+    'autenticacao.middleware.autenticacao_middleware',
+    
 ]
 
 ROOT_URLCONF = 'eadopt.urls'
@@ -57,7 +61,7 @@ ROOT_URLCONF = 'eadopt.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [(os.path.join(BASE_DIR, 'templates'))],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -87,6 +91,10 @@ DATABASES = {
     }
 }
 
+MONGO_HOST = '127.0.0.1'
+MONGO_PORT = 27017
+MONGO_DATABASE = 'eadopt_mac0439_fase3'
+
 
 # Password validation
 # https://docs.djangoproject.com/en/2.0/ref/settings/#auth-password-validators
@@ -110,9 +118,9 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/2.0/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'pt-br'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'America/Sao_Paulo'
 
 USE_I18N = True
 
@@ -125,3 +133,4 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.0/howto/static-files/
 
 STATIC_URL = '/static/'
+STATICFILES_DIRS = [os.path.join(BASE_DIR, "static")]

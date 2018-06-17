@@ -1,1 +1,25 @@
-hello world
+{% extends 'base.html' %}
+{% block content %}
+
+ <div class="panel panel-default">
+     <div class="panel-heading"><strong>Login</strong></div>
+     <div class="panel-body">
+         <form class="form-signin" action="{% url 'usuario_entrar' %}" method="post">
+             {% csrf_token %}
+             
+             <p>
+             E-mail: <br>
+             <input type="text" name="email">
+             </p>
+             
+             <p>
+             Senha: <br>
+             <input type="password" name="senha">
+             </p>
+             
+             <p><input type="submit" value="Entrar" class="btn btn-primary"/></p>
+         </form>
+     </div>
+ </div>
+
+{% endblock %}

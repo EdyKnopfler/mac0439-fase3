@@ -1,0 +1,88 @@
+{% extends 'base.html' %}
+{% block content %}
+
+ <div class="panel panel-default">
+     <div class="panel-heading"><strong>Registro</strong></div>
+     <div class="panel-body">
+         <form class="form-signin" action="{% url 'usuario_criar' %}" method="post">
+             {% csrf_token %}
+             
+             <p>
+             Nome: <br>
+             <input type="text" name="nome" maxlength="80">
+             </p>
+             
+             <p>
+             E-mail: <br>
+             <input type="text" name="email" maxlength="80">
+             </p>
+             
+             <p>
+             Senha: <br>
+             <input type="password" name="senha" maxlength="20">
+             </p>
+             
+             <p>
+             Rua: <br>
+             <input type="text" name="rua" maxlength="80">
+             </p>
+             
+             <p>
+             Bairro: <br>
+             <input type="text" name="bairro" maxlength="80">
+             </p>
+             
+             <p>
+             Cidade: <br>
+             <input type="text" name="cidade" maxlength="80">
+             </p>
+             
+             <p>
+             Estado: <br>
+             <input type="text" name="estado" maxlength="2">
+             </p>
+             
+             <p>
+             CEP: <br>
+             <input type="text" name="cep" maxlength="8">
+             </p>
+             
+             <p>
+             Telefone: <br>
+             <input type="text" name="telefone" maxlength="11">
+             </p>
+             
+             <p>
+             Lat.: <input type="number" name="latitude"> / 
+             Long: <input type="number" name="longitude">
+             </p>
+             
+             <p>
+             Tipo: <br>
+             <select name="tipo">
+                <option value="pf">Pessoa física</option>
+                <option value="pj">Pessoa jurídica</option>
+             </select>
+             </p>
+             
+             <p>
+             CPF: <br>
+             <input type="text" name="cpf" maxlength="11">
+             </p>
+             
+             <p>
+             Data de nascimento: <br>
+             <input type="date" name="data_nascimento">
+             </p>
+             
+             <p>
+             CNPJ: <br>
+             <input type="text" name="cnpj" maxlength="14">
+             </p>
+             
+             <p><input type="submit" value="Cadastrar" class="btn btn-primary"/></p>
+         </form>
+     </div>
+ </div>
+
+{% endblock %}
