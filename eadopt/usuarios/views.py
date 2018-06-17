@@ -2,6 +2,7 @@ from django.shortcuts import render
 from usuarios.models import Usuario, PF, PJ
 from django.contrib import messages
 from django.shortcuts import render, redirect
+from eadopt.mongo import conectar_mongo
 
 def login(request):
     return render(request, 'login.html')
@@ -12,7 +13,7 @@ def entrar(request):
     try:
         usuario_existente = Usuario.objects.get(email=request.POST['email'])
         if usuario_existente.email == request.POST['email'] and usuario_existente.senha == request.POST['senha']:
-            request.session['usuario_id'] = usuario_existente.id
+            set_session(request, usuario_existente)
             return redirect('index')
         else:
             messages.warning(request, mensagem)
@@ -55,6 +56,29 @@ def criar(request):
     novo_usuario.latitude = request.POST['latitude']
     novo_usuario.longitude = request.POST['longitude']
 
+
+    db = conectar_mongo()
+    sitedb = db.usuarios
+    resultado = sitedb.insert_one({
+        'id_postgres': novo_usuario.id,
+        'nome': novo_usuario.nome,
+        'descricao': request.POST['descricao']
+        })
+    novo_usuario.id_mongo = str(resultado.inserted_id)
     novo_usuario.save()
-    request.session['usuario_id'] = novo_usuario.id
+    set_session(request, novo_usuario)
     return redirect('index')
+
+def editar(request):
+    if (request.session['tipo'] == "PF"):
+        usuario = PF.objects.get(id=request.session["usuario_id"])
+    else: 
+        usuario = PJ.objects.get(id=request.session["usuario_id"])
+   
+
+    return render(request, 'editar.html', {"usuario":usuario})
+
+def set_session(request, usuario):
+    request.session['usuario_id'] = usuario.id
+    request.session['usuario_mongo_id'] = usuario.id_mongo
+    request.session['tipo'] = usuario.tipo

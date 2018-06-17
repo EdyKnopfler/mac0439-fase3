@@ -13,6 +13,7 @@ class Usuario(models.Model):
    latitude = models.FloatField(null=True, blank=True)
    longitude = models.FloatField(null=True, blank=True)
    id_mongo = models.CharField(max_length=24, null=True, blank=True)
+   tipo = models.CharField(max_length=2, null=False, blank=False, default="PF")
 
 class PF(Usuario):
    cpf = models.CharField(max_length=11, unique=True)

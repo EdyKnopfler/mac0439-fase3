@@ -20,7 +20,7 @@
             <ul class="nav navbar-nav navbar-right">
                {% if 'usuario_id' in request.session %}
                     <li>
-                        <a href="{# {% url 'usuario_editar' %} #}">Editar Perfil</a>
+                        <a href=" {% url 'usuario_editar' %} ">Editar Perfil</a>
                     </li>
                     <li>
                         <a href="{% url 'usuario_logout' %}">Sair</a>
