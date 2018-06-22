@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% block content %}
+
+ <div class="panel panel-default">
+     <div class="panel-heading"><strong>Pesquisar Pets para Doação</strong></div>
+     <div class="panel-body">
+         pesquisa aqui
+     </div>
+ </div>
+
+ <div class="panel panel-default">
+     <div class="panel-heading"><strong>Meus Anúncios</strong></div>
+     <div class="panel-body">
+         <p><a href="{% url 'anuncio_novo' %}">Novo Anúncio</a></p>
+         
+         {% for anuncio in meus_anuncios %}
+            
+            <p>
+            <b>{{anuncio.pet.nome}}</b> <br>
+            <a href="{% url 'anuncio_editar' anuncio.id %}">Editar</a> 
+            <a href="">Requisitos</a> 
+            <a href="">Candidatos</a> 
+            <a href="">Excluir</a>
+            </p>
+         
+         {% endfor %}
+         
+     </div>
+ </div>
+
+{% endblock %}

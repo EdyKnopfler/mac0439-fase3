@@ -1,0 +1,26 @@
+{% load l10n %}
+
+<p>
+Pet para doação: <br>
+<select name="pet_id">
+{% for p in pets %}
+    <option value="{{p.id}}" {% if p.id == anuncio.pet_id %}selected{% endif %}>{{p.nome}}</option>
+{% endfor %}
+</select>
+</p>
+
+<p>
+Data início: <br>
+<input type="date" name="data_inicio" value="{{anuncio.data_inicio|unlocalize}}">
+</p>
+
+<p>
+Data término: <br>
+<input type="date" name="data_termino" value="{{anuncio.data_termino|unlocalize}}">
+</p>
+
+<p>
+Descrição: <br>
+<textarea name="descricao">{{descricao}}</textarea>
+</p>
+

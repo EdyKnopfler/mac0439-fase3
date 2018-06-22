@@ -22,4 +22,5 @@ from usuarios.views import index
 urlpatterns = [
     url(r'^$', index, name='index'),
     path('usuarios/', include('usuarios.urls')),
+    path('anuncios/', include('anuncios_doacao.urls')),
 ]

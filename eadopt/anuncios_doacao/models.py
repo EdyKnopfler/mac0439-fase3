@@ -9,7 +9,8 @@ class AnuncioDoacao(models.Model):
     data_inicio = models.DateField(null=False)
     data_termino = models.DateField(null=False)
     status = models.CharField(max_length=10, null=False, blank=False, default='Iniciado')
-    escolhido = models.ForeignKey(Usuario, on_delete=models.CASCADE)
+    escolhido = models.ForeignKey(Usuario, on_delete=models.CASCADE, null=True)
+    id_mongo = models.CharField(max_length=24, null=True, blank=True)
 
 class Requisito(models.Model):
     anuncio = models.ForeignKey(AnuncioDoacao, on_delete=models.CASCADE)
