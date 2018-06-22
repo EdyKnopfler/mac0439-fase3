@@ -34,6 +34,11 @@ INSTALLED_APPS = [
 
     'autenticacao',
     'usuarios.apps.UsuariosConfig',
+    'pets.apps.PetsConfig',
+    'visitas.apps.VisitasConfig',
+    'posts.apps.PostsConfig',
+    'anuncios_doacao.apps.AnunciosDoacaoConfig',
+    'processos_doacao.apps.ProcessosDoacaoConfig',
     
     #'django.contrib.admin',
     #'django.contrib.auth',

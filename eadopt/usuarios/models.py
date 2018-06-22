@@ -21,3 +21,4 @@ class PF(Usuario):
    
 class PJ(Usuario):
    cnpj = models.CharField(max_length=14, unique=True)
+   
