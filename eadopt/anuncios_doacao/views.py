@@ -4,8 +4,9 @@ from datetime import datetime, timedelta
 from bson.objectid import ObjectId
 
 from pets.models import Pet
-from anuncios_doacao.models import AnuncioDoacao
+from anuncios_doacao.models import AnuncioDoacao, Requisito
 from eadopt.mongo import conectar_mongo
+from autenticacao.autorizacao import *
 
 
 def index(request):
@@ -20,7 +21,9 @@ def novo(request):
     
     
 def criar(request):
-    novo_anuncio = preencher(AnuncioDoacao(), request)
+    if not dono_pet(request, 'pet_id'):
+        return erro_autorizacao('detectada possível manipulação do ID do Pet')
+    novo_anuncio = preencher_anuncio(AnuncioDoacao(), request)
     novo_anuncio.save()
     resultado = conectar_mongo().anuncios.insert_one({
         'id_postgres': novo_anuncio.id,
@@ -28,17 +31,40 @@ def criar(request):
     })
     novo_anuncio.id_mongo = str(resultado.inserted_id)
     novo_anuncio.save()
-    return redirect('anuncio_index')
+    return redirect('requisito_index', novo_anuncio.id)
     
     
 def editar(request, anuncio_id):
     pets = Pet.objects.filter(dono_id=request.session['usuario_id'])
     anuncio = AnuncioDoacao.objects.get(id=anuncio_id)
     doc = conectar_mongo().anuncios.find_one({"_id": ObjectId(anuncio.id_mongo)})
-    return render(request, 'anuncios/novo.html', {'pets': pets, 'anuncio':anuncio, 'descricao':doc['descricao']})
+    return render(request, 'anuncios/editar.html', {'pets': pets, 'anuncio':anuncio, 'descricao':doc['descricao']})
+
+
+def atualizar(request):
+    if not dono_pet(request, 'pet_id'):
+        return erro_autorizacao('detectada possível manipulação do ID do Pet')
+    existente = AnuncioDoacao.objects.get(id=request.POST['anuncio_id'])
+    if not dono_anuncio(request, existente):
+        return erro_autorizacao('detectada possível manipulação do ID do Anúncio de Doação')
+    anuncio = preencher_anuncio(existente, request)
+    anuncio.save()
+    conectar_mongo().anuncios.update_one({"_id": ObjectId(anuncio.id_mongo)}, {
+        "$set": {'descricao':request.POST['descricao']}
+    })
+    return redirect('anuncio_index')
+
+
+def excluir(request, anuncio_id):
+    anuncio = AnuncioDoacao.objects.get(id=anuncio_id)
+    if not dono_anuncio(request, anuncio):
+        return erro_autorizacao('detectada possível manipulação do ID do Anúncio de Doação')
+    conectar_mongo().anuncios.delete_one({"_id": ObjectId(anuncio.id_mongo)})
+    anuncio.delete()
+    return redirect('anuncio_index')
     
     
-def preencher(anuncio, request):
+def preencher_anuncio(anuncio, request):
     agora = datetime.date(datetime.now())
     anuncio.data_inicio = request.POST['data_inicio'] if request.POST['data_inicio'] != '' else agora
     daqui_um_mes = agora + timedelta(days=30)
@@ -46,3 +72,69 @@ def preencher(anuncio, request):
     anuncio.pet_id = request.POST['pet_id']
     return anuncio
 
+
+def requisitos(request, anuncio_id):
+    requisitos = Requisito.objects.filter(anuncio_id=anuncio_id)
+    return render(request, 'requisitos/index.html', {'anuncio_id':anuncio_id, 'requisitos':requisitos})
+
+
+def novo_requisito(request, anuncio_id):
+    return render(request, 'requisitos/novo.html', {'anuncio_id': anuncio_id})
+    
+    
+def criar_requisito(request):
+    if not dono_anuncio2(request, 'anuncio_id'):
+        return erro_autorizacao('detectada possível manipulação do ID do Anúncio de Doação')
+    novo_req = preencher_requisito(Requisito(), request)
+    novo_req.anuncio_id = request.POST['anuncio_id']
+    novo_req.save()
+    resultado = conectar_mongo().requisitos.insert_one({
+        'id_postgres': novo_req.id,
+        'titulo': request.POST['titulo'],
+        'descricao': request.POST['descricao']
+    })
+    novo_req.id_mongo = str(resultado.inserted_id)
+    novo_req.save()
+    return redirect('requisito_index', novo_req.anuncio_id)
+
+
+def editar_requisito(request, requisito_id):
+    requisito = Requisito.objects.get(id=requisito_id)
+    doc = conectar_mongo().requisitos.find_one({"_id": ObjectId(requisito.id_mongo)})
+    return render(request, 'requisitos/editar.html', {
+        'anuncio_id': requisito.anuncio_id, 'requisito':requisito, 'descricao':doc['descricao']})
+    
+    
+def atualizar_requisito(request):
+    requisito = Requisito.objects.get(id=request.POST['requisito_id'])
+    if not dono_anuncio(request, requisito.anuncio):
+        return erro_autorizacao('detectada possível manipulação do ID do Requisito')
+    requisito = preencher_requisito(requisito, request)
+    requisito.save()
+    conectar_mongo().requisitos.update_one({"_id": ObjectId(requisito.id_mongo)}, {
+        "$set": {'titulo':request.POST['titulo'], 'descricao':request.POST['descricao']}
+    })
+    return redirect('requisito_index', requisito.anuncio_id)
+    
+    
+def excluir_requisito(request, requisito_id):
+    requisito = Requisito.objects.get(id=requisito_id)
+    if not dono_anuncio(request, requisito.anuncio):
+        return erro_autorizacao('detectada possível manipulação do ID do Requisito')
+    anuncio_id = requisito.anuncio_id
+    conectar_mongo().requisitos.delete_one({"_id": ObjectId(requisito.id_mongo)})
+    requisito.delete()
+    return redirect('requisito_index', anuncio_id)
+
+
+def preencher_requisito(requisito, request):
+    requisito.titulo = request.POST['titulo']
+    requisito.tipo = request.POST['tipo']
+    if request.POST['tipo'] == 'Obrigatório':
+        requisito.peso = None
+    else:
+        try:
+            requisito.peso = int(request.POST['peso'])
+        except:
+            requisito.peso = 1
+    return requisito

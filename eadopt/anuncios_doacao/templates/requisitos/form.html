@@ -1,0 +1,38 @@
+<p>
+Título: <br>
+<input type="text" name="titulo" maxlength="80" value="{{requisito.titulo}}">
+</p>
+
+<p>
+Tipo: <br>
+<select name="tipo" id="tipo">
+    <option value="Obrigatório" {% if requisito.tipo == "Obrigatório" %}selected{% endif %}>Obrigatório</option>
+    <option value="Opcional" {% if requisito.tipo == "Opcional" %}selected{% endif %}>Opcional</option>
+</select>
+</p>
+
+<div id="peso">
+<p>
+Peso: <br>
+<input type="text" name="peso" value="{{requisito.peso|default_if_none:''}}" placeholder="valor numérico inteiro">
+</p>
+</div>
+
+<p>
+Descrição: <br>
+<textarea name="descricao">{{descricao}}</textarea>
+</p>
+
+<script>
+    $(document).ready(function() {
+    
+        $("#tipo").change(function() {
+            var tipo = $(this).val();
+            if (tipo == "Obrigatório")
+                $("#peso").hide();
+            else
+                $("#peso").show();
+        }).change();
+    
+    });
+</script>

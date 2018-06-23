@@ -68,7 +68,7 @@ def atualizar(request):
     usuario_editado.id = request.session['usuario_id']
     usuario_editado.save()
     conectar_mongo().usuarios.update_one({"_id": ObjectId(request.session['usuario_mongo_id'])}, {
-        "$set": {'descricao': request.POST['descricao']}
+        "$set": {'nome':request.POST['nome'], 'descricao': request.POST['descricao']}
     })
     return redirect('index')
 

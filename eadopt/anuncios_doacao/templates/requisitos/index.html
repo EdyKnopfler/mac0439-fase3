@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+{% block content %}
+
+ <div class="panel panel-default">
+     <div class="panel-heading"><strong>Requisitos do Anúncio</strong></div>
+     <div class="panel-body">
+         <p><a href="{% url 'requisito_novo' anuncio_id %}">Novo Requisito</a></p>
+         {% for requisito in requisitos %}
+            <p>
+                <b>{{requisito.titulo}}</b> <br>
+                <i>{{requisito.tipo}}</i> <br>
+                <a href="{% url 'requisito_editar' requisito.id %}">Editar</a> 
+                <a href="{% url 'requisito_excluir' requisito.id %}" onclick="return confirm('Tem certeza?')">Excluir</a>
+            </p>
+         {% endfor %}
+     </div>
+ </div>
+
+{% endblock %}
