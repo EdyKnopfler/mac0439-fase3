@@ -6,7 +6,7 @@
      <div class="panel-body">
          <form class="form-signin" action="{% url 'pet_criar' %}" method="post">
              {% csrf_token %}
-             {% include "form.html" %}
+             {% include "form_pet.html" %}
              <p><input type="submit" value="Cadastrar" class="btn btn-primary"/></p>
          </form>
      </div>
