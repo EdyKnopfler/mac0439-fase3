@@ -1,0 +1,17 @@
+{% load l10n %}
+{% csrf_token %}
+
+ <p>
+ Nome: <br>
+ <input type="text" name="nome" maxlength="80" value="{{pet.nome}}">
+ </p>
+
+ <p>
+ Especie: <br>
+ <input type="text" name="especie" maxlength="80" value="{{pet.especie}}" >
+ </p>
+
+ <p>
+ Data de nascimento: <br>
+ <input type="date" name="data_nascimento" value="{{pet.data_nascimento|unlocalize}}">
+ </p>

@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% block content %}
+
+ <div class="panel panel-default">
+     <div class="panel-heading"><strong>Novo pet</strong></div>
+     <div class="panel-body">
+         <form class="form-signin" action="{% url 'pet_criar' %}" method="post">
+             {% csrf_token %}
+             {% include "form.html" %}
+             <p><input type="submit" value="Cadastrar" class="btn btn-primary"/></p>
+         </form>
+     </div>
+ </div>
+
+{% endblock %}
