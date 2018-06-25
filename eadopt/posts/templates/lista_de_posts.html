@@ -1,0 +1,15 @@
+{% load l10n %}
+{% csrf_token %}
+
+<table>
+  <tr>
+    {% if editavel %}<a href="{% url 'post_novo' %}"> Fazer um post</a>{% endif %}
+  </tr>
+    {% for p in posts %}
+        <tr>
+          <h3>{{p.titulo}}</h3>
+          <h4>{{p.texto}}</h4>
+          <i>- Postado em {{p.data_hora}}</i> {% if editavel %}<a href="{% url 'post_editar' %}{{p.id}}/"> editar</a>{% endif %}
+        </tr>
+    {% endfor %}
+</table>
