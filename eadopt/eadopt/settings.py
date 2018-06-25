@@ -39,7 +39,7 @@ INSTALLED_APPS = [
     'posts.apps.PostsConfig',
     'anuncios_doacao.apps.AnunciosDoacaoConfig',
     'processos_doacao.apps.ProcessosDoacaoConfig',
-    
+
     #'django.contrib.admin',
     #'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -56,9 +56,9 @@ MIDDLEWARE = [
     #'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    
+
     'autenticacao.middleware.autenticacao_middleware',
-    
+
 ]
 
 ROOT_URLCONF = 'eadopt.urls'
@@ -89,8 +89,8 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'fase3',
-        'USER': 'fcaetano',
-        'PASSWORD': '235611novo',
+        'USER': 'lima',
+        'PASSWORD': '123456',
         'HOST': '127.0.0.1',
         'PORT': '5432',
     }
@@ -139,3 +139,6 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [os.path.join(BASE_DIR, "static")]
+# STATIC_ROOT = os.path.join(BASE_DIR, "static")
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(STATICFILES_DIRS[0], 'media')

@@ -5,25 +5,13 @@
      <div class="panel-heading"><strong>{% if usuario.nome %}{{usuario.nome}}{% endif %}
        {% if not usuario.nome %}{{usuario.email}}{% endif %}</strong></div>
      <div class="panel-body">
-
-          <h4><i>{{descricao}}</i></h4>
-        </br>
-          <p> <b>INFORMAÇÕES</b> </p>
-          <p>{% if usuario.nome %}nome: {{usuario.nome}}{% endif %}</p>
-          <p>{% if usuario.email %}email: {{usuario.email}}{% endif %}</p>
-          <p>{% if usuario.rua %}rua: {{usuario.rua}}{% endif %}</p>
-          <p>{% if usuario.bairro %}bairro: {{usuario.bairro}}{% endif %}</p>
-          <p>{% if usuario.cidade %}cidade: {{usuario.cidade}}{% endif %}</p>
-          <p>{% if usuario.estado %}estado: {{usuario.estado}}{% endif %}</p>
-          <p>{% if usuario.cep %}cep: {{usuario.cep}}{% endif %}</p>
-          <p>{% if usuario.telefone %}telefone: {{usuario.telefone}}{% endif %}</p>
-
+          {% include "perfil_info.html" %}
      </div>
  </div>
  <div class="panel panel-default">
      <div class="panel-heading"><strong> Posts Recentes</strong></div>
      <div class="panel-body">
-       <p><a href="{% url 'meus_posts' %}"> Ver todos os posts</a></p>
+       <p><a href="{% url 'meus_posts' %}{{usuario.id}}/"> Ver todos os posts</a></p>
        {% include "lista_de_posts.html" %}
      </div>
  </div>

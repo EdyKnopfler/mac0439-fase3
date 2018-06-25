@@ -1,0 +1,14 @@
+{% load l10n %}
+{% csrf_token %}
+
+<h4><i>{{descricao}}</i></h4>
+</br>
+<p> <b>INFORMAÇÕES</b> </p>
+<p>{% if usuario.nome %}nome: {{usuario.nome}}{% endif %}</p>
+<p>{% if usuario.email %}email: {{usuario.email}}{% endif %}</p>
+<p>{% if usuario.rua %}rua: {{usuario.rua}}{% endif %}</p>
+<p>{% if usuario.bairro %}bairro: {{usuario.bairro}}{% endif %}</p>
+<p>{% if usuario.cidade %}cidade: {{usuario.cidade}}{% endif %}</p>
+<p>{% if usuario.estado %}estado: {{usuario.estado}}{% endif %}</p>
+<p>{% if usuario.cep %}cep: {{usuario.cep}}{% endif %}</p>
+<p>{% if usuario.telefone %}telefone: {{usuario.telefone}}{% endif %}</p>

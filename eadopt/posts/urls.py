@@ -11,6 +11,6 @@ urlpatterns = [
     url(r'^editar/([0-9]+)/$', views.editarId, name='post_editar_id'),
     url(r'^atualizar/$', views.atualizar, name='post_atualizar'),
     url(r'^posts/$', views.posts, name='meus_posts'),
-    url(r'^([0-9]+)/posts/$', views.postsOutros, name='post_outros'),
+    url(r'^posts/([0-9]+)/$', views.postsOutros, name='post_outros'),
 
 ]
