@@ -8,8 +8,8 @@ import django.utils.formats as fmt
 
 def login(request):
     return render(request, 'login.html')
-   
-   
+
+
 def entrar(request):
     mensagem = 'E-mail ou senha inválidos. Verifique os dados e tente novamente.'
     try:
@@ -22,17 +22,24 @@ def entrar(request):
     except Usuario.DoesNotExist:
         messages.warning(request, mensagem)
     return redirect('usuario_login')
-    
-    
+
+
 def index(request):
-    return render(request, 'index.html')
-    
-    
+    if (request.session['tipo'] == "pf"):
+        usuario = PF.objects.get(id=request.session["usuario_id"])
+    else:
+        usuario = PJ.objects.get(id=request.session["usuario_id"])
+
+    doc = conectar_mongo().usuarios.find_one({"_id": ObjectId(request.session['usuario_mongo_id'])})
+    # return render(request, 'editar.html', {"usuario":usuario, "descricao": doc['descricao']})
+    return render(request, 'index.html', {"usuario":usuario, "descricao": doc['descricao']})
+
+
 def logout(request):
     request.session.flush()
     return redirect('usuario_login')
-    
-    
+
+
 def novo(request):
     return render(request, 'novo.html')
 
@@ -56,9 +63,9 @@ def criar(request):
 def editar(request):
     if (request.session['tipo'] == "pf"):
         usuario = PF.objects.get(id=request.session["usuario_id"])
-    else: 
+    else:
         usuario = PJ.objects.get(id=request.session["usuario_id"])
-   
+
     doc = conectar_mongo().usuarios.find_one({"_id": ObjectId(request.session['usuario_mongo_id'])})
     return render(request, 'editar.html', {"usuario":usuario, "descricao": doc['descricao']})
 
@@ -84,7 +91,7 @@ def preencher(request):
         tipo = request.session['tipo']
     else:
         tipo = request.POST['tipo']
-        
+
     if tipo == 'pf':
         usuario = PF()
         usuario.cpf = request.POST['cpf']
@@ -95,7 +102,7 @@ def preencher(request):
     else:
         usuario = PJ()
         usuario.cnpj = request.POST['cnpj']
-    
+
     usuario.tipo = tipo
     usuario.nome = request.POST['nome']
     usuario.email = request.POST['email']
@@ -106,18 +113,18 @@ def preencher(request):
     usuario.estado = request.POST['estado']
     usuario.cep = request.POST['cep']
     usuario.telefone = request.POST['telefone']
-    
+
     try:
         latitude = float(request.POST['latitude'].replace(fmt.get_format("DECIMAL_SEPARATOR"), '.'))
     except:
         latitude = 0
-    
+
     try:
         longitude = float(request.POST['longitude'].replace(fmt.get_format("DECIMAL_SEPARATOR"), '.'))
     except:
         longitude = 0
-    
+
     usuario.latitude = latitude
     usuario.longitude = longitude
-    
+
     return usuario

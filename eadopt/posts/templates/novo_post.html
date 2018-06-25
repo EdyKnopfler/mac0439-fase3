@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% block content %}
+
+ <div class="panel panel-default">
+     <div class="panel-heading"><strong>Novo Post</strong></div>
+     <div class="panel-body">
+         <form class="form-signin" action="{% url 'post_criar' %}" enctype="multipart/form-data" method="post">
+            {% include "form_post.html" %}
+
+             <p><input type="submit" value="Postar" class="btn btn-primary"/></p>
+         </form>
+     </div>
+ </div>
+
+{% endblock %}

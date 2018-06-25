@@ -17,4 +17,3 @@ class Midia(models.Model):
 class MarcadoNoPost(models.Model):
     usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE)
     post = models.ForeignKey(Post, on_delete=models.CASCADE)
-    

@@ -1,0 +1,17 @@
+{% load l10n %}
+{% csrf_token %}
+
+ <p>
+ Título: <br>
+ <input type="text" name="titulo" maxlength="80" value="{{post.titulo}}">
+ </p>
+
+ <p>
+ Texto: <br>
+ <textarea name="texto">{{post.texto}}</textarea>
+ </p>
+
+ <p>
+ Foto: <br>
+ <input type="file" name="pic" accept="image/*">
+</p>

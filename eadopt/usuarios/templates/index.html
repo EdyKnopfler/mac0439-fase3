@@ -4,7 +4,16 @@
  <div class="panel panel-default">
      <div class="panel-heading"><strong>Home</strong></div>
      <div class="panel-body">
-         bem-vindo panguá
+         bem-vindo  <a href="{% url 'perfil' %}">
+         {% if usuario.nome %}
+           {{usuario.nome}}
+         {% endif %}
+
+         {% if not usuario.nome %}
+           {{usuario.email}}
+         {% endif %}
+         !
+       </a>
      </div>
  </div>
 
