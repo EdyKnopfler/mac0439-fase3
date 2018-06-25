@@ -30,11 +30,10 @@ def perfilOutros(request, user_id):
     try:
         posts = Post.objects.filter(usuario_id=user_id).order_by('-data_hora')[0:5]
         for post in posts:
-            post.texto = conectar_mongo().posts.find_one({"id_postgres" : post.id})['texto']
-    except:
-        e = sys.exc_info()
-        print("erro!")
-        print(e)
+            texto_mongo = conectar_mongo().posts.find_one({"id_postgres" : post.id})
+            if texto_mongo:
+                post.texto = texto_mongo['texto']
+    except Exception:
         posts = []
 
     return render(request, 'perfil.html', {"usuario":usuario, "descricao":descricao, "posts":posts, "editavel":owner})

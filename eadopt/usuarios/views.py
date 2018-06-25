@@ -31,8 +31,14 @@ def index(request):
         usuario = PJ.objects.get(id=request.session["usuario_id"])
 
     doc = conectar_mongo().usuarios.find_one({"_id": ObjectId(request.session['usuario_mongo_id'])})
+
+    if doc:
+        descricao = doc['descricao']
+    else:
+        descricao = ''
+
     # return render(request, 'editar.html', {"usuario":usuario, "descricao": doc['descricao']})
-    return render(request, 'index.html', {"usuario":usuario, "descricao": doc['descricao']})
+    return render(request, 'index.html', {"usuario":usuario, "descricao": descricao})
 
 
 def logout(request):
