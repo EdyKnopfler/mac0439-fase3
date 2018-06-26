@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render     
 from pets.models import Pet
 from usuarios.models import Usuario
 from django.contrib import messages
@@ -9,14 +9,15 @@ import django.utils.formats as fmt
 
 def index(request):
     pets = list(Pet.objects.filter(dono_id=request.session['usuario_id']))
-    for pet in pets:
-        print (pet.nome)
-    print("OIiiiii")
     return render(request, 'pets_do_usuario.html', { "pets":pets })
 
 def novo(request):
     return render(request, 'novo_pet.html')
 
+def perfil(request, pet_id):
+    pet = Pet.objects.get(id=pet_id)
+    dono = Usuario.objects.get(id=pet.dono_id)
+    return render(request, 'perfil_pet.html', {"pet":pet, "dono":dono})
 
 def criar(request):
     novo_pet = preencher(request)
