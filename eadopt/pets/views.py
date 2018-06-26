@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render     
 from pets.models import Pet
 from usuarios.models import Usuario
 from django.contrib import messages
@@ -12,7 +12,7 @@ def index(request):
     return render(request, 'pets_do_usuario.html', { "pets":pets })
 
 def novo(request):
-    return redirect('pets_index')
+    return render(request, 'novo_pet.html')
 
 def perfil(request, pet_id):
     pet = Pet.objects.get(id=pet_id)
