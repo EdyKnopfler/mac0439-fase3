@@ -1,20 +1,18 @@
 {% extends 'base.html' %}
 {% block content %}
-
  <div class="panel panel-default">
      <div class="panel-heading"><strong>Seus Pets</strong></div>
      <div class="panel-body">
        <p>
-         <a href="{% url 'pet_novo' %}">Adicionar novo pet</a>  <br>
-       </p>
-       <p>
          <ul>
-         {% for p in pets %}
-             <li ><a href="{% url 'pet_perfil' p.id %}">{{p.nome}}</a></li>
-         {% endfor %}
+         	<li>{{dono.nome}}</li>
+         	<li>{{pet.nome}}</li>
+         	<li>{{pet.data_nascimento}}</li>
+         	<li>{{pet.especie}}</li>
+
         </ul>
        </p>
      </div>
- </div>
+ 	</div>
 
 {% endblock %}
