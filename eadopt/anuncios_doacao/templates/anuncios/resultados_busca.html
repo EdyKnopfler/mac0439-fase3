@@ -18,7 +18,9 @@
 
             {% for a in anuncios %}
                 <p>
-                <a href="{% url 'anuncio_visualizar' a.id %}">{{a.pet.nome}}</a> <br>
+                <b>{{a.pet.nome}}</b> <br>
+                <a href="{% url 'anuncio_visualizar' a.id %}">Ver anúncio</a> <br>
+                <a href="{% url 'pet_perfil' a.pet.id %}">Perfil do Pet</a>
                 </p>
             {% endfor %}
 
