@@ -13,5 +13,6 @@
 
  <p>
  Foto: <br>
+ {% if post.arquivo %}<img src="../../../static/media/{{post.arquivo}}"> {% endif %}
  <input type="file" name="pic" accept="image/*">
 </p>

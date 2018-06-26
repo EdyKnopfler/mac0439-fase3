@@ -114,6 +114,7 @@ def atualizar(request):
         filename, file_extension = os.path.splitext(myFile.name)
         filename = fs.save(
             str(request.session['usuario_id']) + file_extension, myFile)
+        fs.delete(existente.arquivo)
         existente.arquivo = filename
     except Exception:
         pass
