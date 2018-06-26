@@ -2,18 +2,24 @@ from django.shortcuts import render, redirect
 from django.contrib import messages
 from datetime import datetime, timedelta
 from bson.objectid import ObjectId
-from django.db.models import Q
+from django.db.models import Q, ProtectedError
 
 from pets.models import Pet
 from anuncios_doacao.models import AnuncioDoacao, Requisito
 from eadopt.mongo import conectar_mongo
 from autenticacao.autorizacao import *
+from processos_doacao.models import ProcessoDoacao, StatusRequisito
+
+
+# TODO refatorar esta coisa que já está ficando enorme :P
+# tentar quebrar o arquivo em dois e linká-nos no urls.py
 
 
 def index(request):
     meus_pets = Pet.objects.filter(dono_id=request.session['usuario_id'])
     meus_anuncios = AnuncioDoacao.objects.filter(pet__in=meus_pets)
-    return render(request, 'anuncios/index.html', {'meus_anuncios':meus_anuncios})
+    meus_processos = ProcessoDoacao.objects.filter(candidato_id=request.session['usuario_id'])
+    return render(request, 'anuncios/index.html', {'meus_anuncios':meus_anuncios, 'meus_processos':meus_processos})
 
     
 def novo(request):
@@ -57,11 +63,14 @@ def atualizar(request):
 
 
 def excluir(request, anuncio_id):
-    anuncio = AnuncioDoacao.objects.get(id=anuncio_id)
-    if not dono_anuncio(request, anuncio):
-        return erro_autorizacao('detectada possível manipulação do ID do Anúncio de Doação')
-    conectar_mongo().anuncios.delete_one({"_id": ObjectId(anuncio.id_mongo)})
-    anuncio.delete()
+    try:
+        anuncio = AnuncioDoacao.objects.get(id=anuncio_id)
+        if not dono_anuncio(request, anuncio):
+            return erro_autorizacao('detectada possível manipulação do ID do Anúncio de Doação')
+        conectar_mongo().anuncios.delete_one({"_id": ObjectId(anuncio.id_mongo)})
+        anuncio.delete()
+    except ProtectedError:
+        messages.warning(request, 'Ainda há candidatos!')
     return redirect('anuncio_index')
     
     
@@ -99,9 +108,12 @@ def visualizar(request, anuncio_id):
     descricoes_reqs = {}
     for r in reqs_mongo:
         descricoes_reqs[r['id_postgres']] = r['descricao']
-    
+    status_requisitos = StatusRequisito.objects.filter(anuncio_id=anuncio_id,candidato_id=request.session['usuario_id'])
+    status = {}
+    for s in status_requisitos:
+        status[s.titulo] = s.status
     return render(request, 'anuncios/visualizar.html', {'anuncio':anuncio, 'descricao':doc['descricao'], 
-        'requisitos':requisitos, 'descricoes_reqs':descricoes_reqs})
+        'requisitos':requisitos, 'descricoes_reqs':descricoes_reqs, 'status':status})
     
     
 def preencher_anuncio(anuncio, request):
@@ -136,6 +148,7 @@ def criar_requisito(request):
     })
     novo_req.id_mongo = str(resultado.inserted_id)
     novo_req.save()
+    # status de requisito para todos os processos são inseridos automaticamente via trigger
     return redirect('requisito_index', novo_req.anuncio_id)
 
 

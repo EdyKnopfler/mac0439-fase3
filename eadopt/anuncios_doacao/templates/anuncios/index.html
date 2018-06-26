@@ -26,4 +26,13 @@
      </div>
  </div>
 
+ <div class="panel panel-default">
+     <div class="panel-heading"><strong>Processos de Doação em Andamento</strong></div>
+     <div class="panel-body">
+         {% for processo in meus_processos %}
+         <a href="{% url 'anuncio_visualizar' processo.anuncio.id %}">{{processo.anuncio.pet.nome}}</a> <br>
+         {% endfor %}
+     </div>
+ </div>
+
 {% endblock %}

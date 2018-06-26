@@ -8,9 +8,15 @@
      <div class="panel-body">
         
         <p>
-        <a href="{% url 'pet_perfil' anuncio.pet.id %}">Perfil do Pet</a>
-        <a href="">Candidatar-se</a>
+        <a href="{% url 'pet_perfil' anuncio.pet.id %}">Perfil do Pet</a> <br>
+        {% if status|count == 0 %}
+            <a href="{% url 'processo_criar' anuncio.id %}">Candidatar-se</a>
+        {% else %}
+            <i>Você está se candidatando a adotar este pet! :)</i> 
+            <a href="{% url 'processo_cancelar' anuncio.id %}" onclick="return confirm('Desistir de adotar o Pet?');">Cancelar</a>
+        {% endif %}
         </p>
+        
         <p>{{descricao}}</p>
         <h3>Requisitos</h3>
         
@@ -18,8 +24,9 @@
             
             <p>
             <b>{{r.titulo}}</b> <br>
-            {{r.tipo}} {% if r.peso %} (peso: {{r.peso}}) {% endif %} <br>
-            <i>{{descricoes_reqs|keyvalue:r.id}}</i>
+            <i>{{r.tipo}} {% if r.peso %} (peso: {{r.peso}}) {% endif %}<i>
+            {% if status|count > 0 %} | <u>{{status|keyvalue:r.titulo}}</u> {% endif %} <br>
+            {{descricoes_reqs|keyvalue:r.id}}
             </p>
         
         {% endfor %}

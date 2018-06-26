@@ -27,6 +27,7 @@ urlpatterns = [
     path('anuncios/', include('anuncios_doacao.urls')),
     path('pets/', include('pets.urls')),
     path('perfil/', include('posts.urls')),
+    path('processos/', include('processos_doacao.urls')),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

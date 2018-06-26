@@ -8,3 +8,7 @@ def keyvalue(dict, key):
         return dict[key]
     except KeyError:
         return ''
+        
+@register.filter
+def count(dict):
+    return len(dict)
