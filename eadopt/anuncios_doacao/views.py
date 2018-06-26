@@ -67,8 +67,9 @@ def excluir(request, anuncio_id):
         anuncio = AnuncioDoacao.objects.get(id=anuncio_id)
         if not dono_anuncio(request, anuncio):
             return erro_autorizacao('detectada possível manipulação do ID do Anúncio de Doação')
-        conectar_mongo().anuncios.delete_one({"_id": ObjectId(anuncio.id_mongo)})
-        anuncio.delete()
+        id_mongo = anuncio.id_mongo
+        anuncio.delete()  # se der erro de integridade referencial, não excluir do MongoDB!!!
+        conectar_mongo().anuncios.delete_one({"_id": ObjectId(id_mongo)})
     except ProtectedError:
         messages.warning(request, 'Ainda há candidatos!')
     return redirect('anuncio_index')

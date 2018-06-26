@@ -59,3 +59,10 @@ execute procedure CriarStatusParaNovoRequisito();
 alter table processos_doacao_statusrequisito
 add foreign key(anuncio_id, titulo) 
 references anuncios_doacao_requisito(anuncio_id, titulo) ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- Ao excluir um *Processo de Doação*
+-- excluir também todos os *Status de Requisitos*
+alter table processos_doacao_statusrequisito
+add foreign key(anuncio_id, candidato_id) 
+references processos_doacao_processodoacao(anuncio_id, candidato_id) ON DELETE CASCADE;
+

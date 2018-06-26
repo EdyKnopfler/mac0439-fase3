@@ -18,4 +18,11 @@ def criar(request, anuncio_id):
 
 
 def cancelar(request, anuncio_id):
-    pass
+    ProcessoDoacao.objects.get(anuncio_id=anuncio_id, candidato_id=request.session['usuario_id']).delete()
+    return redirect('anuncio_visualizar', anuncio_id)
+    
+    
+def candidatos(request, anuncio_id):
+    anuncio = AnuncioDoacao.objects.get(id=anuncio_id)
+    processos = ProcessoDoacao.objects.filter(anuncio_id=anuncio_id)
+    return render(request, 'processos_doacao/index.html', {'anuncio':anuncio, 'processos':processos})

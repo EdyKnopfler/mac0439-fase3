@@ -19,7 +19,7 @@
                 <i>{{anuncio.status}}</i> <br>
                 <a href="{% url 'anuncio_editar' anuncio.id %}">Editar</a> 
                 <a href="{% url 'requisito_index' anuncio.id %}">Requisitos</a> 
-                <a href="">Candidatos</a> 
+                <a href="{% url 'processo_index' anuncio.id %}">Candidatos</a> 
                 <a href="{% url 'anuncio_excluir' anuncio.id %}" onclick="return confirm('Tem certeza?')">Excluir</a>
             </p>
          {% endfor %}

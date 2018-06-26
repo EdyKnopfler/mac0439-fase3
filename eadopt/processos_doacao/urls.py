@@ -5,4 +5,5 @@ from . import views
 urlpatterns = [
     url(r'^candidatar/(?P<anuncio_id>\d+)$', views.criar, name='processo_criar'),
     url(r'^cancelar/(?P<anuncio_id>\d+)$', views.cancelar, name='processo_cancelar'),
+    url(r'^candidatos/(?P<anuncio_id>\d+)$', views.candidatos, name='processo_index'),
 ]
