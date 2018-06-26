@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% load dicionarios %}
+
+{% block content %}
+
+ <div class="panel panel-default">
+     <div class="panel-heading"><strong>{{anuncio.pet.nome}}</strong></div>
+     <div class="panel-body">
+        
+        <p>
+        <a href="">Perfil do Pet</a> <br>
+        <a href="">Candidatar-se</a>
+        </p>
+        <p>{{descricao}}</p>
+        <h3>Requisitos</h3>
+        
+        {% for r in requisitos %}
+            
+            <p>
+            <b>{{r.titulo}}</b> <br>
+            {{r.tipo}} {% if r.peso %} (peso: {{r.peso}}) {% endif %} <br>
+            <i>{{descricoes_reqs|keyvalue:r.id}}</i>
+            </p>
+        
+        {% endfor %}
+               
+     </div>
+ </div>
+
+{% endblock %}

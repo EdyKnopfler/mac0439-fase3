@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib import messages
 from datetime import datetime, timedelta
 from bson.objectid import ObjectId
+from django.db.models import Q
 
 from pets.models import Pet
 from anuncios_doacao.models import AnuncioDoacao, Requisito
@@ -64,6 +65,45 @@ def excluir(request, anuncio_id):
     return redirect('anuncio_index')
     
     
+def busca(request):
+    busca_dic = {"$text": {"$search": request.GET['q']}}
+    mongo = conectar_mongo()
+    
+    busca_pets = mongo.pets.find(busca_dic)
+    ids_pets = []
+    for p in busca_pets:
+        print("achei pet")
+        ids_pets.append(p['id_postgres'])
+      
+    busca_anuncios = mongo.anuncios.find(busca_dic)
+    ids_anuncios = []
+    for a in busca_anuncios:
+        print("achei anuncio")
+        ids_anuncios.append(a['id_postgres'])
+    
+    busca_requisitos = mongo.requisitos.find(busca_dic)
+    for r in busca_requisitos:
+        print("achei requisito")
+        ids_anuncios.append(r['id_anuncio_postgres'])
+        
+    anuncios = AnuncioDoacao.objects.filter(Q(pet_id__in=ids_pets) | Q(id__in=ids_anuncios))
+    return render(request, 'anuncios/resultados_busca.html', {'anuncios':anuncios})
+    
+    
+def visualizar(request, anuncio_id):
+    anuncio = AnuncioDoacao.objects.get(id=anuncio_id)
+    mongo = conectar_mongo()
+    doc = mongo.anuncios.find_one({"_id": ObjectId(anuncio.id_mongo)})
+    requisitos = Requisito.objects.filter(anuncio_id=anuncio_id)
+    reqs_mongo = mongo.requisitos.find({'id_anuncio_postgres':anuncio_id})
+    descricoes_reqs = {}
+    for r in reqs_mongo:
+        descricoes_reqs[r['id_postgres']] = r['descricao']
+    
+    return render(request, 'anuncios/visualizar.html', {'anuncio':anuncio, 'descricao':doc['descricao'], 
+        'requisitos':requisitos, 'descricoes_reqs':descricoes_reqs})
+    
+    
 def preencher_anuncio(anuncio, request):
     agora = datetime.date(datetime.now())
     anuncio.data_inicio = request.POST['data_inicio'] if request.POST['data_inicio'] != '' else agora
@@ -90,6 +130,7 @@ def criar_requisito(request):
     novo_req.save()
     resultado = conectar_mongo().requisitos.insert_one({
         'id_postgres': novo_req.id,
+        'id_anuncio_postgres': novo_req.anuncio_id,
         'titulo': request.POST['titulo'],
         'descricao': request.POST['descricao']
     })
