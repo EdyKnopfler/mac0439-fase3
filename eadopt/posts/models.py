@@ -8,6 +8,7 @@ class Post(models.Model):
     titulo = models.CharField(max_length=80, null=False, blank=False)
     id_mongo = models.CharField(max_length=24, null=True, blank=True)
     arquivo = models.FileField(blank=True)
+    video = models.BooleanField(max_length=3, blank=True, default = False)
 
 class MarcadoNoPost(models.Model):
     usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE)

@@ -22,12 +22,31 @@
    {% for m in post.marcados %}
      <input type="checkbox" name = "marcados" value = "{{m.nome}}" checked onclick = "apagar();"> <label id = "{{m.name}}">{{m.nome}}</label> </input>
    {% endfor %}
- </div> <br>
-
+ </div>
  <div class="ui-widget">
    <input id="autocomplete-user">
    <input id="clickMe" type="button" value="Marcar Usuário" onclick="marcar();" />
  </div>
+  <br>
+</p>
+
+ <p>
+ Anexar um arquivo: <br>
+ {% if post.arquivo %}
+   {% if post.video %}
+    <video width="320" height="240" controls>
+      <source src="../../../static/media/{{post.arquivo}}">
+    </video>
+   {% else %}
+    <img src="../../../static/media/{{post.arquivo}}">
+   {% endif %}
+   <br>
+ {% endif %}
+ <input type="radio" name="fileType" value="pic" checked>Foto
+ <input type="radio" name="fileType" value="vid">Vídeo
+ <input type="file" name="arquivo">
+ <input name="clear_file" type="button" value="Cancelar" onclick="clearFile();" />
+</p>
 
  <script type="text/javascript">
     $(document).ready(function(){
@@ -37,6 +56,11 @@
           minLength: 2
         });
       } );
+
+    function clearFile(){
+      var arq = document.getElementsByName("arquivo");
+      arq[0].value = "";
+    }
 
     function marcar() {
       var aux = $('input[id="autocomplete-user"]');
@@ -56,10 +80,3 @@
       }
     }
 </script>
- </p>
-
- <p>
- Foto: <br>
- {% if post.arquivo %}<img src="../../../static/media/{{post.arquivo}}"> {% endif %}
- <input type="file" name="pic" accept="image/*">
-</p>

@@ -1,2 +1,4 @@
 **/__pycache__
 eadopt/static/media/*
+
+eadopt/posts/migrations/

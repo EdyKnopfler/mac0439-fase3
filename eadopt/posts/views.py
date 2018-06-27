@@ -66,7 +66,7 @@ def perfilOutros(request, user_id):
         post.marcados = []
         for marcado in marcados:
             pessoa = Usuario.objects.get(id=marcado.usuario_id)
-            aux = Tageados(pessoa.nome + " (" + pessoa.email + ")", pessoa.id)
+            aux = Tageados(pessoa.nome, pessoa.id)
             post.marcados += [aux]
 
     return render(request, 'perfil.html', {"usuario":usuario, "descricao":descricao, "posts":posts, "editavel":owner})
@@ -96,7 +96,7 @@ def novo(request):
     return render(request, 'novo_post.html')
 
 def criar(request):
-    #print(request.POST)
+    print(request.POST)
     novo_post = preencher(request)
     novo_post.save()
     resultado = conectar_mongo().posts.insert_one({
@@ -122,16 +122,18 @@ def criar(request):
 def preencher(request):
     post = Post()
     try:
-        myFile = request.FILES['pic']
+        print(request.FILES)
+        myFile = request.FILES['arquivo']
         fs = FileSystemStorage()
         filename, file_extension = os.path.splitext(myFile.name)
         filename = fs.save(
             str(request.session['usuario_id']) + file_extension, myFile)
+        if (request.POST['fileType'] == 'vid'):
+            post.video = True
     except Exception:
         filename = ''
     post.arquivo = filename
     post.titulo = request.POST['titulo']
-    post.tem_midia = False
     post.usuario_id = request.session['usuario_id']
     return post
 
@@ -158,32 +160,36 @@ def editarId(request, post_id):
     return render(request, 'editar_post.html', {'post':post})
 
 def atualizar(request):
+    print(request.POST)
     existente = Post.objects.get(id=request.POST['post_id'])
     existente.titulo = request.POST['titulo']
     conectar_mongo().posts.update_one({"_id": ObjectId(existente.id_mongo)}, {
         "$set": {'texto':request.POST['texto']}
     })
     try:
-        myFile = request.FILES['pic']
+        myFile = request.FILES['arquivo']
         fs = FileSystemStorage()
         filename, file_extension = os.path.splitext(myFile.name)
         filename = fs.save(
             str(request.session['usuario_id']) + file_extension, myFile)
         fs.delete(existente.arquivo)
         existente.arquivo = filename
+        if (request.POST['fileType'] == 'vid'):
+            existente.video = True
     except Exception:
         pass
     existente.save()
 
     marcados = request.POST.getlist('marcados')
+    MarcadoNoPost.objects.filter(post_id = existente.id).delete()
     for marcado in marcados:
         email = marcado.split('(')[1]
         email = email[:len(email)-1]
+        print(email)
         usuario = Usuario.objects.get(email=email)
-        if not MarcadosNoPost.objects.get(usuario_id = usuario.id, post_id = existente.id):
-            marcadoNoPost = MarcadoNoPost()
-            marcadoNoPost.usuario_id = usuario.id
-            marcadoNoPost.post_id = existente.id
-            marcadoNoPost.save()
+        marcadoNoPost = MarcadoNoPost()
+        marcadoNoPost.usuario_id = usuario.id
+        marcadoNoPost.post_id = existente.id
+        marcadoNoPost.save()
 
     return redirect('perfil')
