@@ -9,5 +9,5 @@ urlpatterns = [
     url(r'^perfil/(?P<pet_id>\d+)$', views.perfil, name='pet_perfil'),
     url(r'^editar/(?P<pet_id>\d+)$', views.editar, name='pet_editar'),
    	url(r'^atualizar/$', views.atualizar, name='pet_atualizar'),
-    url(r'^remover/$', views.remover, name='pet_remover')
+    url(r'^remover/(?P<pet_id>\d+)$', views.remover, name='pet_remover')
 ]

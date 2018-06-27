@@ -51,12 +51,21 @@ def atualizar(request):
     })
     return redirect ('pets_index')
 
-def remover(request):
-    return Oi
+def remover(request, pet_id):
+    pet = Pet.objects.get(id=pet_id)
+    conectar_mongo().pets.delete_one({"_id": ObjectId(pet.id_mongo)})
+    fotos = list(Foto.objects.filter(pet = pet))
+    for foto in fotos:
+        foto.delete()
+    pet.delete()
+
+    return redirect('pets_index')
 
 def perfil(request, pet_id):
     pet = Pet.objects.get(id=pet_id)
     dono = Usuario.objects.get(id=pet.dono_id)
+    descricao = conectar_mongo().pets.find_one({"_id": ObjectId(pet.id_mongo)})
+    pet.descricao = descricao["descricao"]
     fotos = Foto.objects.filter(pet_id = pet.id)
     return render(request, 'perfil_pet.html', {"pet":pet, "dono":dono, "fotos":fotos})
 
