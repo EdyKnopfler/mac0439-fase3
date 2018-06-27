@@ -96,7 +96,7 @@ def novo(request):
     return render(request, 'novo_post.html')
 
 def criar(request):
-    print(request.POST)
+    # print(request.POST)
     novo_post = preencher(request)
     novo_post.save()
     resultado = conectar_mongo().posts.insert_one({
@@ -122,7 +122,7 @@ def criar(request):
 def preencher(request):
     post = Post()
     try:
-        print(request.FILES)
+        # print(request.FILES)
         myFile = request.FILES['arquivo']
         fs = FileSystemStorage()
         filename, file_extension = os.path.splitext(myFile.name)
@@ -160,7 +160,7 @@ def editarId(request, post_id):
     return render(request, 'editar_post.html', {'post':post})
 
 def atualizar(request):
-    print(request.POST)
+    # print(request.POST)
     existente = Post.objects.get(id=request.POST['post_id'])
     existente.titulo = request.POST['titulo']
     conectar_mongo().posts.update_one({"_id": ObjectId(existente.id_mongo)}, {
@@ -185,7 +185,7 @@ def atualizar(request):
     for marcado in marcados:
         email = marcado.split('(')[1]
         email = email[:len(email)-1]
-        print(email)
+        # print(email)
         usuario = Usuario.objects.get(email=email)
         marcadoNoPost = MarcadoNoPost()
         marcadoNoPost.usuario_id = usuario.id
