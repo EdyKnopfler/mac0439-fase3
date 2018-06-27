@@ -20,3 +20,17 @@
  Descrição: <br>
  <textarea name="descricao">{{pet.descricao}}</textarea>
  </p>
+
+ <p>
+Fotos: <br>
+<input type="file" name="arquivo" accept="image/*" multiple/>
+<input name="clear_file" type="button" value="Cancelar upload" onclick="clearFile();" />
+ </p>
+
+ <script type="text/javascript">
+
+    function clearFile(){
+      var arq = document.getElementsByName("arquivo");
+      arq[0].value = "";
+    }
+</script>

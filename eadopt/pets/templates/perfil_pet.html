@@ -5,12 +5,17 @@
      <div class="panel-body">
        <p>
          <ul>
-         	<li>{{dono.nome}}</li>
-         	<li>{{pet.nome}}</li>
-         	<li>{{pet.data_nascimento}}</li>
-         	<li>{{pet.especie}}</li>
-
+         	<li><b>Dono: </b>{{dono.nome}}</li>
+         	<li><b>Nome: </b>{{pet.nome}}</li>
+         	<li><b>Data de nascimento: </b>{{pet.data_nascimento}}</li>
+         	<li><b>Espécie: </b>{{pet.especie}}</li>
         </ul>
+       </p>
+       <hr>
+       <p>
+         {% for f in fotos %}
+         <img src="../../../static/media/{{f.arquivo}}">
+         {% endfor %}
        </p>
      </div>
  	</div>

@@ -2,3 +2,5 @@
 eadopt/static/media/*
 
 eadopt/posts/migrations/
+
+eadopt/pets/migrations/

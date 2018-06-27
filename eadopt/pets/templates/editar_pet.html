@@ -4,7 +4,7 @@
  <div class="panel panel-default">
      <div class="panel-heading"><strong>Editar Perfil</strong></div>
      <div class="panel-body">
-         <form class="form-signin" action="{% url 'pet_atualizar' %}" method="post">
+         <form class="form-signin" action="{% url 'pet_atualizar' %}" method="post" enctype="multipart/form-data">
             {% include "form_pet.html" %}
 
              <p><input type="submit" value="Editar" class="btn btn-primary"/></p>

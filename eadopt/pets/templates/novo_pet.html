@@ -4,7 +4,7 @@
  <div class="panel panel-default">
      <div class="panel-heading"><strong>Novo pet</strong></div>
      <div class="panel-body">
-         <form class="form-signin" action="{% url 'pet_criar' %}" method="post">
+         <form class="form-signin" action="{% url 'pet_criar' %}" enctype="multipart/form-data" method="post">
              {% csrf_token %}
              {% include "form_pet.html" %}
              <p><input type="submit" value="Cadastrar" class="btn btn-primary"/></p>
