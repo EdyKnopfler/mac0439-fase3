@@ -31,19 +31,14 @@ def atualizar(request):
     pet.id_mongo = request.session['pet_mongo_id']
     pet.save()
     try:
-        print(request.POST)
-        print(request.FILES)
         fotos = request.FILES.getlist('arquivo')
-        print(fotos)
         fs = FileSystemStorage()
         for arqv in fotos:
-            print(arqv)
-            print(arqv.name)
             filename, file_extension =  os.path.splitext(arqv.name)
             filename = fs.save(
-                str(request.session['usuario_id']) + "_" + str(novo_pet.id) + file_extension, arqv)
+                str(request.session['usuario_id']) + "_" + str(pet.id) + file_extension, arqv)
             foto = Foto()
-            foto.pet_id = novo_pet.id
+            foto.pet_id = pet.id
             foto.arquivo = filename
             foto.save()
     except Exception:
@@ -68,14 +63,9 @@ def criar(request):
     novo_pet = preencher(request)
     novo_pet.save()
     try:
-        print(request.POST)
-        print(request.FILES)
         fotos = request.FILES.getlist('arquivo')
-        print(fotos)
         fs = FileSystemStorage()
         for arqv in fotos:
-            print(arqv)
-            print(arqv.name)
             filename, file_extension =  os.path.splitext(arqv.name)
             filename = fs.save(
                 str(request.session['usuario_id']) + "_" + str(novo_pet.id) + file_extension, arqv)
