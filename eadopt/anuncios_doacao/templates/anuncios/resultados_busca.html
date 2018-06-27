@@ -18,9 +18,11 @@
 
             {% for a in anuncios %}
                 <p>
+                <img align="left" width="100" alt="{{a.pet.nome}}" src="/static/media/{{a.pet.foto_set.first.arquivo}}">
                 <b>{{a.pet.nome}}</b> <br>
                 <a href="{% url 'anuncio_visualizar' a.id %}">Ver anúncio</a> <br>
                 <a href="{% url 'pet_perfil' a.pet.id %}">Perfil do Pet</a>
+                <br clear="all">
                 </p>
             {% endfor %}
 
