@@ -8,6 +8,10 @@
     {% for p in posts %}
         <tr>
           <h3>{{p.titulo}}</h3>
+          {% for m in p.marcados %}
+            <a href="{% url 'perfil' %}{{m.id}}">@{{m.nome}} </a>
+          {% endfor %}
+        </br>
           {% if p.arquivo %}<img src="../../static/media/{{p.arquivo}}"> {% endif %}
           <h4>{{p.texto}}</h4>
           <i>- Postado em {{p.data_hora}}</i> {% if editavel %}<a href="{% url 'post_editar' %}{{p.id}}/"> editar</a>{% endif %}

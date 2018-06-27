@@ -12,5 +12,5 @@ urlpatterns = [
     url(r'^atualizar/$', views.atualizar, name='post_atualizar'),
     url(r'^posts/$', views.posts, name='meus_posts'),
     url(r'^posts/([0-9]+)/$', views.postsOutros, name='post_outros'),
-
+    url(r'^get_user_names/', views.get_user_names),
 ]
