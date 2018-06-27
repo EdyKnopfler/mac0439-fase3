@@ -7,7 +7,7 @@ urlpatterns = [
     url(r'^novo/$', views.novo, name='pet_novo'),
     url(r'^criar/$', views.criar, name='pet_criar'),
     url(r'^perfil/(?P<pet_id>\d+)$', views.perfil, name='pet_perfil'),
-    # url(r'^editar/$', views.editar, name='usuario_editar'),
-    # url(r'^atualizar/$', views.atualizar, name='usuario_atualizar'),
-    #url(r'^remover/$', views.delete, name='usuario_remover')
+    url(r'^editar/(?P<pet_id>\d+)$', views.editar, name='pet_editar'),
+   	url(r'^atualizar/$', views.atualizar, name='pet_atualizar'),
+    url(r'^remover/$', views.remover, name='pet_remover')
 ]

@@ -14,6 +14,27 @@ def index(request):
 def novo(request):
     return render(request, 'novo_pet.html')
 
+def editar(request, pet_id):
+    pet = Pet.objects.get(id=pet_id)
+    descricao = conectar_mongo().pets.find_one({"_id": ObjectId(pet.id_mongo)})
+    pet.descricao = descricao["descricao"]
+    request.session['pet_mongo_id'] = pet.id_mongo
+    request.session['pet_id'] = pet.id
+    return render (request, 'editar_pet.html', {"pet": pet})
+
+def atualizar(request):
+    pet = preencher(request)
+    pet.id = request.session["pet_id"]
+    pet.id_mongo = request.session['pet_mongo_id']
+    pet.save()
+    conectar_mongo().pets.update_one({"_id": ObjectId(request.session['pet_mongo_id'])}, {
+        "$set": {'nome':request.POST['nome'], 'descricao': request.POST['descricao']}
+    })
+    return redirect ('pets_index')
+
+def remover(request):
+    return Oi
+
 def perfil(request, pet_id):
     pet = Pet.objects.get(id=pet_id)
     dono = Usuario.objects.get(id=pet.dono_id)
@@ -40,5 +61,6 @@ def preencher(request):
     pet.data_nascimento = request.POST['data_nascimento']
     pet.nome = request.POST['nome']
     pet.especie = request.POST['especie']
-
+    pet.descricao = request.POST['descricao']
     return pet
+
