@@ -16,14 +16,15 @@
  </p>
 
  <p>
+
+ Marcar usuários: <br>
+ <div id="marcados">
+   {% for m in post.marcados %}
+     <input type="checkbox" name = "marcados" value = "{{m.nome}}" checked onclick = "apagar();"> <label id = "{{m.name}}">{{m.nome}}</label> </input>
+   {% endfor %}
+ </div> <br>
+
  <div class="ui-widget">
-   Marcar usuários: <br>
-   <select multiple name ="marcados" id="marcados">
-     {% for m in post.marcados %}
-       <option selected value = "{{m.nome}}"> {{m.nome}} </option>
-     {% endfor %}
-   </select>
- </p>
    <input id="autocomplete-user">
    <input id="clickMe" type="button" value="Marcar Usuário" onclick="marcar();" />
  </div>
@@ -38,16 +39,21 @@
       } );
 
     function marcar() {
+      var aux = $('input[id="autocomplete-user"]');
       var nome = $('input[id="autocomplete-user"]').val();
-      // var marcados = $("#marcados").val();
-      // for(var i=0, len = $("#marcados").length; i < len && marcados != null; i++){
-      //   if( marcados[i] == nome)
-      //     var aux = "#marcados option[value= '"+nome+"'']";
-      //     $("#marcados option[value= '"+nome+"']").remove();
-      // }
-      $("#marcados").append($( "<option selected> ",{ value : nome}).text(nome));
-      $('#marcados').size = "2";
+      $("#marcados").append($( "<input type = \"checkbox\" checked value=\""+nome+"\" name=\"marcados\" onclick = \"apagar();\"><label name = \""+nome+"\">"+nome+"</label></input>"));
+    }
 
+    function apagar() {
+      var checkboxes = document.getElementsByName('marcados');
+      for (var i = 0; i < checkboxes.length; i++){
+        var checkbox = checkboxes[i];
+        if(!checkbox.checked){
+          // var nome = checkbox.attr("value");
+          checkbox.nextElementSibling.remove();
+          checkbox.parentNode.removeChild(checkbox);
+        }
+      }
     }
 </script>
  </p>

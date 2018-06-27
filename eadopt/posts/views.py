@@ -1,4 +1,5 @@
 from usuarios.models import Usuario
+from django.db.models import Q
 from posts.models import Post, MarcadoNoPost
 from django.shortcuts import render, redirect
 from eadopt.mongo import conectar_mongo
@@ -13,7 +14,7 @@ import json
 def get_user_names(request):
     if request.is_ajax():
         q = request.GET.get('term', '')
-        nomes = Usuario.objects.filter(nome__icontains = q )[:10]
+        nomes = Usuario.objects.filter(Q(nome__icontains = q) | Q(email__icontains = q) )[:10]
         results = []
         for n in nomes:
             info = {}
@@ -23,7 +24,7 @@ def get_user_names(request):
         data = json.dumps(results)
     else:
         data = 'fail'
-    print(data)
+    # print(data)
     mimetype = 'application/json'
     return HttpResponse(data, mimetype)
 
@@ -95,6 +96,7 @@ def novo(request):
     return render(request, 'novo_post.html')
 
 def criar(request):
+    #print(request.POST)
     novo_post = preencher(request)
     novo_post.save()
     resultado = conectar_mongo().posts.insert_one({
@@ -104,7 +106,7 @@ def criar(request):
         })
     novo_post.id_mongo = str(resultado.inserted_id)
     novo_post.save()
-    marcados = request.POST.getlist('marcados')
+    marcados = set(request.POST.getlist('marcados'))
     for marcado in marcados:
         email = marcado.split('(')[1]
         email = email[:len(email)-1]
@@ -151,7 +153,7 @@ def editarId(request, post_id):
         aux = Tageados(pessoa.nome + " (" + pessoa.email + ")", pessoa.id)
         post.marcados += [aux]
 
-        print(post.marcados)
+        #print(post.marcados)
 
     return render(request, 'editar_post.html', {'post':post})
 
