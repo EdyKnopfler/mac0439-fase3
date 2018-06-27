@@ -23,7 +23,8 @@ def editar(request, pet_id):
     pet.descricao = descricao["descricao"]
     request.session['pet_mongo_id'] = pet.id_mongo
     request.session['pet_id'] = pet.id
-    return render (request, 'editar_pet.html', {"pet": pet})
+    fotos = Foto.objects.filter(pet_id = pet.id)
+    return render (request, 'editar_pet.html', {"pet": pet, "fotos":fotos})
 
 def atualizar(request):
     pet = preencher(request)

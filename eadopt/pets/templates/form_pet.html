@@ -23,6 +23,9 @@
 
  <p>
 Fotos: <br>
+{% for f in fotos %}
+<img src="../../../static/media/{{f.arquivo}}">
+{% endfor %}
 <input type="file" name="arquivo" accept="image/*" multiple/>
 <input name="clear_file" type="button" value="Cancelar upload" onclick="clearFile();" />
  </p>
