@@ -11,6 +11,7 @@ urlpatterns = [
     url(r'^atualizar/$', anuncios_views.atualizar, name='anuncio_atualizar'),
     url(r'^busca/$', anuncios_views.busca, name='anuncio_busca'),
     url(r'^visualizar/(?P<anuncio_id>\d+)$', anuncios_views.visualizar, name='anuncio_visualizar'),
+    url(r'^encerrar/(?P<processo_vencedor_id>\d+)$', anuncios_views.encerrar, name='anuncio_encerrar'),
     
     url(r'^(?P<anuncio_id>\d+)/requisitos/$', requisitos_views.requisitos, name='requisito_index'),
     url(r'^(?P<anuncio_id>\d+)/requisitos/novo$', requisitos_views.novo_requisito, name='requisito_novo'),

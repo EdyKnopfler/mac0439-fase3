@@ -4,7 +4,7 @@ from usuarios.models import Usuario
 from anuncios_doacao.models import AnuncioDoacao
 
 class ProcessoDoacao(models.Model):
-    anuncio = models.ForeignKey(AnuncioDoacao, on_delete=models.PROTECT)
+    anuncio = models.ForeignKey(AnuncioDoacao, on_delete=models.CASCADE)
     candidato = models.ForeignKey(Usuario, on_delete=models.CASCADE)
     data_inicio = models.DateField(null=False)
     data_termino = models.DateField(null=False)

@@ -16,7 +16,9 @@
          {% for anuncio in meus_anuncios %}
             <p>
                 <b>{{anuncio.pet.nome}}</b> <br>
-                <i>{{anuncio.status}}</i> <br>
+                <i>{{anuncio.status}}</i> 
+                {% if anuncio.prazo_encerrado %} <u>Prazo encerrado!</u> {% endif %}
+                <br>
                 <a href="{% url 'anuncio_editar' anuncio.id %}">Editar</a> 
                 <a href="{% url 'requisito_index' anuncio.id %}">Requisitos</a> 
                 <a href="{% url 'processo_index' anuncio.id %}">Candidatos</a> 

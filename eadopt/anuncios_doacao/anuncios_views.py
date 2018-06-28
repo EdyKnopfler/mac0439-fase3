@@ -13,7 +13,7 @@ from processos_doacao.models import ProcessoDoacao, StatusRequisito
 
 def index(request):
     meus_pets = Pet.objects.filter(dono_id=request.session['usuario_id'])
-    meus_anuncios = AnuncioDoacao.objects.filter(pet__in=meus_pets)
+    meus_anuncios = AnuncioDoacao.objects.filter(pet__in=meus_pets).exclude(status='Finalizado')
     meus_processos = ProcessoDoacao.objects.filter(candidato_id=request.session['usuario_id'])
     return render(request, 'anuncios/index.html', {'meus_anuncios':meus_anuncios, 'meus_processos':meus_processos})
 
@@ -78,21 +78,20 @@ def busca(request):
     busca_pets = mongo.pets.find(busca_dic)
     ids_pets = []
     for p in busca_pets:
-        print("achei pet")
         ids_pets.append(p['id_postgres'])
       
     busca_anuncios = mongo.anuncios.find(busca_dic)
     ids_anuncios = []
     for a in busca_anuncios:
-        print("achei anuncio")
         ids_anuncios.append(a['id_postgres'])
     
     busca_requisitos = mongo.requisitos.find(busca_dic)
     for r in busca_requisitos:
-        print("achei requisito")
         ids_anuncios.append(r['id_anuncio_postgres'])
         
-    anuncios = AnuncioDoacao.objects.filter(Q(pet_id__in=ids_pets) | Q(id__in=ids_anuncios))
+    anuncios = AnuncioDoacao.objects.filter(
+            Q(pet_id__in=ids_pets) | Q(id__in=ids_anuncios), 
+            data_termino__gte=datetime.date(datetime.now())).exclude(status='Finalizado')
     return render(request, 'anuncios/resultados_busca.html', {'anuncios':anuncios})
     
     
@@ -111,6 +110,28 @@ def visualizar(request, anuncio_id):
         status[s.titulo] = s.status
     return render(request, 'anuncios/visualizar.html', {'anuncio':anuncio, 'descricao':doc['descricao'], 
         'requisitos':requisitos, 'descricoes_reqs':descricoes_reqs, 'status':status})
+        
+        
+def encerrar(request, processo_vencedor_id):
+    vencedor = ProcessoDoacao.objects.get(id=processo_vencedor_id)
+    anuncio = vencedor.anuncio
+    if not dono_anuncio(request, anuncio):
+        return erro_autorizacao('detectada tentativa de alterar o status de um Anúncio pertencente a outro usuário')
+    agora = datetime.date(datetime.now())
+    # status do anúncio
+    anuncio.data_termino = agora
+    anuncio.status = 'Finalizado'
+    anuncio.escolhido_id = vencedor.candidato_id
+    anuncio.save()
+    # status dos processos
+    processos = ProcessoDoacao.objects.filter(anuncio_id=anuncio.id)
+    for p in processos:
+        p.data_termino = agora
+        p.save()
+    # transferência da propriedade do Pet
+    anuncio.pet.dono_id = vencedor.candidato_id
+    anuncio.pet.save()
+    return redirect('anuncio_index')
     
     
 def preencher_anuncio(anuncio, request):
