@@ -83,15 +83,23 @@ def postsOutros(request, user_id):
         owner = True
     else:
         owner = False
+
     try:
         posts = Post.objects.filter(usuario_id=user_id).order_by('-data_hora')
         for post in posts:
-            post.texto = conectar_mongo().posts.find_one({"id_postgres" : post.id})['texto']
-    except:
-        e = sys.exc_info()
-        print("erro!")
-        print(e)
+            texto_mongo = conectar_mongo().posts.find_one({"id_postgres" : post.id})
+            if texto_mongo:
+                post.texto = texto_mongo['texto']
+    except Exception:
         posts = []
+
+    for post in posts:
+        marcados = MarcadoNoPost.objects.filter(post_id = post.id)
+        post.marcados = []
+        for marcado in marcados:
+            pessoa = Usuario.objects.get(id=marcado.usuario_id)
+            aux = Tageados(pessoa.nome, pessoa.id)
+            post.marcados += [aux]
 
     return render(request, 'lista_posts.html', {"posts":posts, "editavel":owner})
 

@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from usuarios.models import Usuario, PF, PJ
-from posts.models import Post
+from posts.models import Post, MarcadoNoPost
+from posts.views import Tageados
 from django.contrib import messages
 from django.shortcuts import render, redirect
 from eadopt.mongo import conectar_mongo
@@ -44,7 +45,21 @@ def index(request):
             post.autor = Usuario.objects.get(id=post.usuario_id).nome
         except Exception:
             post.autor = Usuario.objects.get(id=post.usuario_id).email
-    # return render(request, 'editar.html', {"usuario":usuario, "descricao": doc['descricao']})
+
+        marcados = MarcadoNoPost.objects.filter(post_id = post.id)
+        post.marcados = []
+        for marcado in marcados:
+            pessoa = Usuario.objects.get(id=marcado.usuario_id)
+            aux = Tageados(pessoa.nome, pessoa.id)
+            post.marcados += [aux]
+
+        try:
+            texto_mongo = conectar_mongo().posts.find_one({"id_postgres" : post.id})
+            if texto_mongo:
+                post.texto = texto_mongo['texto']
+        except Exception:
+            pass
+
     return render(request, 'index.html', {"usuario":usuario, "descricao": descricao, "posts":posts})
 
 
@@ -80,7 +95,13 @@ def editar(request):
         usuario = PJ.objects.get(id=request.session["usuario_id"])
 
     doc = conectar_mongo().usuarios.find_one({"_id": ObjectId(request.session['usuario_mongo_id'])})
-    return render(request, 'editar.html', {"usuario":usuario, "descricao": doc['descricao']})
+
+    if doc:
+        descricao = doc['descricao']
+    else:
+        descricao = ''
+
+    return render(request, 'editar.html', {"usuario":usuario, "descricao": descricao})
 
 
 def atualizar(request):
