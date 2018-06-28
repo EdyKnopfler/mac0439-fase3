@@ -10,11 +10,15 @@
         <img align="right" width="300" alt="{{anuncio.pet.nome}}" src="/static/media/{{anuncio.pet.foto_set.first.arquivo}}">
         <p>
         <a href="{% url 'pet_perfil' anuncio.pet.id %}">Perfil do Pet</a> <br>
-        {% if status|count == 0 %}
-            <a href="{% url 'processo_criar' anuncio.id %}">Candidatar-se</a>
+        {% if anuncio.status == 'Finalizado' %}
+            <i>Este anúncio está encerrado.</i>
         {% else %}
-            <i>Você está se candidatando a adotar este pet! :)</i> 
-            <a href="{% url 'processo_cancelar' anuncio.id %}" onclick="return confirm('Desistir de adotar o Pet?');">Cancelar</a>
+            {% if status|count == 0 %}
+                <a href="{% url 'processo_criar' anuncio.id %}">Candidatar-se</a>
+            {% else %}
+                <i>Você está se candidatando a adotar este pet! :)</i> 
+                <a href="{% url 'processo_cancelar' anuncio.id %}" onclick="return confirm('Desistir de adotar o Pet?');">Cancelar</a>
+            {% endif %}
         {% endif %}
         </p>
         

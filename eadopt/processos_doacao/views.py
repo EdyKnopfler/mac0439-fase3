@@ -64,7 +64,7 @@ def consulta_ranking(anuncio_id):
     sql = """
         -- quem fez a maior pontuação em requisitos opcionais
         select
-            proc.id, proc.candidato_id, usu.nome, sum(req.peso) as pontuacao
+            proc.id, usu.nome, sum(req.peso) as pontuacao
         from 
             processos_doacao_processodoacao proc
             join processos_doacao_statusrequisito status on 

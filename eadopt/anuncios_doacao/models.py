@@ -1,4 +1,5 @@
 from django.db import models
+from datetime import date
 
 from pets.models import Pet
 from usuarios.models import Usuario
@@ -11,6 +12,9 @@ class AnuncioDoacao(models.Model):
     status = models.CharField(max_length=10, null=False, blank=False, default='Iniciado')
     escolhido = models.ForeignKey(Usuario, on_delete=models.CASCADE, null=True)
     id_mongo = models.CharField(max_length=24, null=True, blank=True)
+    
+    def prazo_encerrado(self):
+        return date.today() > self.data_termino
 
 class Requisito(models.Model):
     anuncio = models.ForeignKey(AnuncioDoacao, on_delete=models.CASCADE)

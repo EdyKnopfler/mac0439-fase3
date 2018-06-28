@@ -1,7 +1,27 @@
 {% extends 'base.html' %}
 {% block content %}
 
- <div class="panel panel-default">
+<div class="meus-pets-div">
+  <p class="posts-title">Meus Pets</p>
+  <p>
+    <a href="{% url 'pet_novo' %}">Adicionar novo pet</a>  <br>
+  </p>
+  <div class="pet-list-div">
+    {% for p in pets %}
+      <div class="pet-div">
+        {% if p.foto_set.first.arquivo %}
+        <img class="pet-div-img" alt="{{p.nome}}" src="/static/media/{{p.foto_set.first.arquivo}}">
+        {% else %}
+        <img class="pet-div-img" alt="{{p.nome}}" src="/static/img/avatar1.png">
+        {% endif %}
+
+        <a class="pet-div-name" href="{% url 'pet_perfil' p.id %}">{{p.nome}}</a>
+      </div>
+    {% endfor %}
+  </div>
+</div>
+
+ <!--<div class="panel panel-default">
      <div class="panel-heading"><strong>Seus Pets</strong></div>
      <div class="panel-body">
        <p>
@@ -10,11 +30,11 @@
        <p>
          <ul>
          {% for p in pets %}
-             <li ><a href="{% url 'pet_perfil' p.id %}">{{p.nome}}</a> <a href="{% url 'pet_editar' p.id %}">Editar</a> <a href="{% url 'pet_remover' p.id %}" onclick="return confirm('Tem certeza?')">Remover</a></li>
+             <li ><a href="{% url 'pet_perfil' p.id %}">{{p.nome}}</a> <a href="{% url 'pet_editar' p.id %}">Editar</a> <a href="{% url 'visitas_remover' p.id %}" onclick="return confirm('Tem certeza?')">Remover</a></li>
          {% endfor %}
         </ul>
        </p>
      </div>
- </div>
+ </div>-->
 
 {% endblock %}
