@@ -13,7 +13,7 @@
             <div class="panel-body">
               <p class="post-text">{{p.texto}}
                 {% for m in p.marcados %}
-                  - <a href="{% url 'perfil' %}{{m.id}}">@{{m.nome}} </a> 
+                  - <a href="{% url 'perfil' %}{{m.id}}">@{{m.nome}} </a>
                 {% endfor %}
               </p>
               {% if p.arquivo %}
@@ -22,7 +22,7 @@
                     <source src="../../../static/media/{{p.arquivo}}">
                   </video>
                 {% else %}
-                  <img class="post-image" src="../../static/media/{{p.arquivo}}">
+                  <img class="post-image" src="../../../static/media/{{p.arquivo}}">
                 {% endif %}
               {% endif %}
               <i>- Postado em {{p.data_hora}}</i>
