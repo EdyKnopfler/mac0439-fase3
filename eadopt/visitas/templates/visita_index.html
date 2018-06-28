@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<h1> Visitas </h1>
+<div class="panel panel-default">
+    <div class="panel-heading"><strong>Suas Visitas</strong></div>
+    <div class="panel-body">
+      <p>
+        <a href="{% url 'visitas_criar' %}">Adicionar nova visita</a>  <br>
+      </p>
+      <p>
+        <ul>
+           {% for visita in visitas %}
+                      <li >{{visita.pet.nome}}, {{visita.data_hora}}</li>
+           {% endfor %}
+       </ul>
+      </p>
+    </div>
+</div>
+
+{% endblock %}

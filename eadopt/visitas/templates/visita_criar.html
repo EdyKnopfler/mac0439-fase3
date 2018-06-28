@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% block content %}
+
+ <div class="panel panel-default">
+     <div class="panel-heading"><strong>eu nao tenho vergonha na face</strong></div>
+     <div class="panel-body">
+         <form class="form-signin" action="{% url 'visitas_convidar' %}" method="post">
+             {% csrf_token %}
+             {% include "visita_form.html" %}
+             <p><input type="submit" value="Convidar" class="btn btn-primary"/></p>
+         </form>
+     </div>
+ </div>
+
+{% endblock %}

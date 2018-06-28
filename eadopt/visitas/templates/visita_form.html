@@ -1,0 +1,21 @@
+{% load l10n %}
+{% csrf_token %}
+
+<select id="select_pet" name="pet">
+{% for pet in pets %}
+   <option value="{{pet.id}}">
+       {{pet.nome}}
+   </option>
+{% endfor %}
+</select>
+
+
+<p>
+Data de Visita: <br>
+<input type="datetime-local" name="data_hora" value="{{visita.data_visita|unlocalize}}">
+</p>
+
+<p>
+Comentario: <br>
+<textarea name="comentario">{{visita.comentario}}</textarea>
+</p>
