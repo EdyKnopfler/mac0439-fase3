@@ -17,15 +17,14 @@ def index(request):
     visitas = list(Visita.objects.filter(visitante_id=request.session["usuario_id"]))
 
     pets = list(Pet.objects.filter(dono_id=request.session["usuario_id"]))
-    #print (pets)
-    #print (visitas)
     convites = {}
 
-    #for p in pets:
-    #convites[p.nome] = list(Visita.objects.filter(pet_id=p.id))
-    #    print(convites[p.nome])
+    for p in pets:
+        convites[p.nome] = list(Visita.objects.filter(pet_id=p.id))
 
-    #print(convites)
+    #for convidado, convite in convites.items():
+    #    for c in convite:
+    #        print (c.pet.nome)
 
 
 

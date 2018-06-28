@@ -15,7 +15,24 @@
               <a href="{% url 'visitas_remover' visita.id %}" onclick="return confirm('Tem certeza?')">Remover</a></li>
            {% endfor %}
        </ul>
-      </p>
+     </p>
+   </div>
+</div>
+
+
+<div class="panel panel-default">
+  <div class="panel-heading"><strong>Seus Convites</strong></div>
+    <div class="panel-body">
+      <ul>
+          {% for convidado, convite in convites.items %}
+            {% for c in convite %}
+              <li>
+                <a>{{c.pet.nome}}, {{c.data_hora}}, {{c.visitante.nome}}</a>
+                <a href="{% url 'visitas_remover' c.id %}" onclick="return confirm('Tem certeza?')">Remover</a>
+              </li>
+            {% endfor %}
+          {% endfor %}
+      </ul>
     </div>
 </div>
 
