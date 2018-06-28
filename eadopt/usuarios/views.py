@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from usuarios.models import Usuario, PF, PJ
+from posts.models import Post
 from django.contrib import messages
 from django.shortcuts import render, redirect
 from eadopt.mongo import conectar_mongo
@@ -37,8 +38,14 @@ def index(request):
     else:
         descricao = ''
 
+    posts = Post.objects.all().order_by('-data_hora')[0:20]
+    for post in posts:
+        try:
+            post.autor = Usuario.objects.get(id=post.usuario_id).nome
+        except Exception:
+            post.autor = Usuario.objects.get(id=post.usuario_id).email
     # return render(request, 'editar.html', {"usuario":usuario, "descricao": doc['descricao']})
-    return render(request, 'index.html', {"usuario":usuario, "descricao": descricao})
+    return render(request, 'index.html', {"usuario":usuario, "descricao": descricao, "posts":posts})
 
 
 def logout(request):

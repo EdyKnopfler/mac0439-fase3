@@ -4,7 +4,7 @@
  <div class="panel panel-default">
      <div class="panel-heading"><strong>Home</strong></div>
      <div class="panel-body">
-         bem-vindo  <a href="{% url 'perfil' %}">
+         Bem-vindo(a)  <a href="{% url 'perfil' %}">
          {% if usuario.nome %}
            {{usuario.nome}}
          {% endif %}
@@ -14,6 +14,38 @@
          {% endif %}
          !
        </a>
+     </div>
+ </div>
+
+ <div class="panel panel-default">
+     <div class="panel-heading"><strong>Feed de Posts</strong></div>
+     <div class="panel-body">
+       <table>
+         {% if posts %}
+           {% for p in posts %}
+               <tr>
+                 <h3>{{p.titulo}}</h3>
+                 {% for m in p.marcados %}
+                   <a href="{% url 'perfil' %}{{m.id}}">@{{m.nome}} </a>
+                 {% endfor %}
+               </br>
+               {% if p.arquivo %}
+                 {% if p.video %}
+                  <video width="320" height="240" controls>
+                    <source src="../../../static/media/{{p.arquivo}}">
+                  </video>
+                 {% else %}
+                  <img src="../../../static/media/{{p.arquivo}}">
+                 {% endif %}
+               {% endif %}
+                 <h4>{{p.texto}}</h4>
+                 <i>- Postado por <a href="{% url 'perfil' %}{{p.usuario_id}}">@{{p.autor}}</a> em {{p.data_hora}}</i>
+               </tr>
+               <hr>
+           {% endfor %}
+         {% endif %}
+       </table>
+
      </div>
  </div>
 
