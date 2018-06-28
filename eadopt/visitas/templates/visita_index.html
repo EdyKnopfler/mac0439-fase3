@@ -11,7 +11,8 @@
       <p>
         <ul>
            {% for visita in visitas %}
-                      <li ><a>{{visita.pet.nome}}, {{visita.data_hora}}</a><a href="{% url 'visitas_remover' visita.id %}" onclick="return confirm('Tem certeza?')">Remover</a></li>
+              <li ><a>{{visita.pet.nome}}, {{visita.data_hora}}</a>
+              <a href="{% url 'visitas_remover' visita.id %}" onclick="return confirm('Tem certeza?')">Remover</a></li>
            {% endfor %}
        </ul>
       </p>

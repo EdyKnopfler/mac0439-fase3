@@ -11,9 +11,15 @@
 
 
 <p>
-Data de Visita: <br>
-<input type="datetime-local" name="data_hora" value="{{visita.data_visita|unlocalize}}">
+Data da Visita: <br>
+<input type="date" name="data" value="{{visita.data_visita|unlocalize}}">
 </p>
+
+<p>
+Hora da Visita: <br>
+<input type="time" name="hora" value="{{visita.hora_visita|unlocalize}}">
+</p>
+
 
 <p>
 Comentario: <br>

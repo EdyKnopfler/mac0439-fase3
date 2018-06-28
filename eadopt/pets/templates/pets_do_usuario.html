@@ -1,8 +1,11 @@
 {% extends 'base.html' %}
 {% block content %}
 
+{% load staticfiles %}
+<link rel="stylesheet" href="{% static 'styles/pets.css' %}">
+
 <div class="meus-pets-div">
-  <p class="posts-title">Meus Pets</p>
+  <p class="posts-title centered">Meus Pets</p>
   <p>
     <a href="{% url 'pet_novo' %}">Adicionar novo pet</a>  <br>
   </p>
@@ -10,9 +13,9 @@
     {% for p in pets %}
       <div class="pet-div">
         {% if p.foto_set.first.arquivo %}
-        <img class="pet-div-img" alt="{{p.nome}}" src="/static/media/{{p.foto_set.first.arquivo}}">
+        <img class="pet-div-img pet-img-bigger" alt="{{p.nome}}" src="/static/media/{{p.foto_set.first.arquivo}}">
         {% else %}
-        <img class="pet-div-img" alt="{{p.nome}}" src="/static/img/avatar1.png">
+        <img class="pet-div-img pet-img-bigger" alt="{{p.nome}}" src="/static/img/avatar1.png">
         {% endif %}
 
         <a class="pet-div-name" href="{% url 'pet_perfil' p.id %}">{{p.nome}}</a>

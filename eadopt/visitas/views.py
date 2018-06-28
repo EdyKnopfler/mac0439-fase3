@@ -16,8 +16,20 @@ def index(request):
 
     visitas = list(Visita.objects.filter(visitante_id=request.session["usuario_id"]))
 
+    pets = list(Pet.objects.filter(dono_id=request.session["usuario_id"]))
+    #print (pets)
+    #print (visitas)
+    #convites = {}
 
-    return render(request, 'visita_index.html', {"usuario":usuario, "visitas":visitas})
+    #for p in pets:
+    #convites[p.nome] = list(Visita.objects.filter(pet_id=p.id))
+    #    print(convites[p.nome])
+
+    #print(convites)
+
+
+
+    return render(request, 'visita_index.html', {"usuario":usuario, "visitas":visitas, "convites":convites})
 
 def criar(request):
     pets = list(Pet.objects.all())
@@ -50,6 +62,6 @@ def preencher(request):
     visita.visitante = Usuario.objects.get(id=request.session["usuario_id"])
     pet = Pet.objects.get(id=request.POST["pet"])
     visita.pet = pet
-    visita.data_hora = request.POST["data_hora"]
+    visita.data_hora = request.POST["data"] + "T" + request.POST["hora"]
     visita.comentario = request.POST["comentario"]
     return visita

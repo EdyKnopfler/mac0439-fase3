@@ -1,6 +1,36 @@
 {% extends 'base.html' %}
 {% block content %}
- <div class="panel panel-default">
+
+{% load staticfiles %}
+<link rel="stylesheet" href="{% static 'styles/pets.css' %}">
+
+<div class="pets-pet-div">
+  <div class="pet-pet-div">
+    <div class="pet-info-div">
+      <p class="posts-title">{{pet.nome}}</p>
+      <a href="{% url 'pet_editar' pet.id %}">Editar</a>
+      <a href="{% url 'visitas_remover' pet.id %}" onclick="return confirm('Tem certeza?')">Remover</a>
+      <p><b>Dono: </b>{{dono.nome}}</p>
+      <p><b>Nome: </b>{{pet.nome}}</p>
+      <p><b>Data de nascimento: </b>{{pet.data_nascimento}}</p>
+      <p><b>Espécie: </b>{{pet.especie}}</p>
+      <p><b>Descrição: </b>{{pet.descricao}}</p>
+    </div>
+    <hr>
+    <div class="pet-gallery-div">
+      <div>
+        {% for f in fotos %}
+          <img class="pet-photo" src="../../../static/media/{{f.arquivo}}">
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+  <div class="pet-ficha-div">
+
+  </div>
+</div>
+
+<!-- <div class="panel panel-default">
      <div class="panel-heading"><strong>Seus Pets</strong></div>
      <div class="panel-body">
        <p>
@@ -19,6 +49,6 @@
          {% endfor %}
        </p>
      </div>
- 	</div>
+ 	</div>-->
 
 {% endblock %}
