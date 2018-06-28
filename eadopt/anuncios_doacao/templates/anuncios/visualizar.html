@@ -7,6 +7,7 @@
      <div class="panel-heading"><strong>{{anuncio.pet.nome}}</strong></div>
      <div class="panel-body">
         
+        <img align="right" width="300" alt="{{anuncio.pet.nome}}" src="/static/media/{{anuncio.pet.foto_set.first.arquivo}}">
         <p>
         <a href="{% url 'pet_perfil' anuncio.pet.id %}">Perfil do Pet</a> <br>
         {% if status|count == 0 %}
@@ -18,6 +19,7 @@
         </p>
         
         <p>{{descricao}}</p>
+        <br clear="all">
         <h3>Requisitos</h3>
         
         {% for r in requisitos %}

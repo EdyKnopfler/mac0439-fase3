@@ -18,11 +18,23 @@
  
  
  <div class="panel panel-default">
-     <div class="panel-heading"><strong>Cumprem os requisitos - Ranking de pontuação</strong></div>
+     <div class="panel-heading"><strong>Cumprem os requisitos obrigatórios</strong></div>
      <div class="panel-body">
-     
-     kkkkkkk
-     
+         <table class="table">
+            <tr>
+                <th>Candidato</th>
+                <th>Pontuação <br> (reqs. opcionais)</th>
+            </tr>
+            {% for r in ranking %}
+            <tr> 
+                <td>{{r.2}}</td>
+                <td>{% if r.3 == None %} 0 {% else %} {{r.3}} {% endif %}</td>
+                <td>
+                    <a href="">Doar</a>
+                </td>
+            </tr>
+            {% endfor %}
+         </table>
      </div>
  </div>
  
