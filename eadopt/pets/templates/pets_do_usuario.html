@@ -10,7 +10,7 @@
        <p>
          <ul>
          {% for p in pets %}
-             <li ><a href="{% url 'pet_perfil' p.id %}">{{p.nome}}</a> <a href="{% url 'pet_editar' p.id %}">Editar</a> <a href="{% url 'pet_remover' p.id %}" onclick="return confirm('Tem certeza?')">Remover</a></li>
+             <li ><a href="{% url 'pet_perfil' p.id %}">{{p.nome}}</a> <a href="{% url 'pet_editar' p.id %}">Editar</a> <a href="{% url 'visitas_remover' p.id %}" onclick="return confirm('Tem certeza?')">Remover</a></li>
          {% endfor %}
         </ul>
        </p>

@@ -38,6 +38,11 @@ def convidar(request):
     visita_nova.save()
     return redirect('visitas_index')
 
+def remover(request, visita_id):
+    visita = Visita.objects.get(id=visita_id)
+    visita.delete()
+    return redirect('visitas_index')
+
 
 
 def preencher(request):
