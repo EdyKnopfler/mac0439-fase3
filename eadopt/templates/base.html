@@ -6,47 +6,54 @@
     <title>eAdopt</title>
     <script src="{% static 'scripts/vendor/jquery-1.9.1.js' %}"></script>
     <link rel="stylesheet" href="{% static 'styles/bootstrap.css' %}">
-    <link rel="stylesheet" href="{% static 'styles/main.css' %}">
-    <link rel="stylesheet" href="{% static 'styles/signin.css' %}">
+    <link rel="stylesheet" href="{% static 'styles/eadopt.css' %}">
+    <link rel="stylesheet" href="{% static 'styles/perfil.css' %}">
+    <!--<link rel="stylesheet" href="{% static 'styles/main.css' %}">
+    <link rel="stylesheet" href="{% static 'styles/signin.css' %}">-->
+        <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
 </head>
 
 <body>
 
 <header>
     <nav class="navbar navbar-default navbar-fixed-top navbar-inverse">
-        <div class="container">
             <div class="navbar-header">
                 <a class="navbar-brand" href="/">eAdopt</a>
             </div>
             <ul class="nav navbar-nav navbar-right">
                {% if 'usuario_id' in request.session %}
                     <li>
-                        <a href=" {% url 'pets_index' %} ">Meus Pets</a>
+                      <a class="main-text" href="{% url 'perfil' %}">Perfil</a>
                     </li>
                     <li>
-                        <a href=" {% url 'visitas_index' %} ">Visitas</a>
+                        <a class="main-text" href=" {% url 'pets_index' %} ">Meus Pets</a>
                     </li>
                     <li>
-                        <a href=" {% url 'anuncio_index' %} ">Doações</a>
+                        <a class="main-text" href=" {% url 'visitas_index' %} ">Visitas</a>
                     </li>
                     <li>
-                        <a href=" {% url 'usuario_editar' %} ">Editar Perfil</a>
+                        <a class="main-text" href=" {% url 'anuncio_index' %} ">Doações</a>
                     </li>
                     <li>
-                        <a href="{% url 'usuario_logout' %}">Sair</a>
+                        <a class="main-text" href=" {% url 'usuario_editar' %} ">Editar Perfil</a>
+                    </li>
+                    <li>
+                        <a class="main-text" href="{% url 'usuario_logout' %}">Sair</a>
                     </li>
                 {% else %}
                     <li>
-                        <a href="{% url 'usuario_novo' %}">Registre-se</a>
+                        <a class="main-text" href="{% url 'usuario_login' %}">Login</a>
+                    </li>
+                    <li>
+                        <a class="main-text" href="{% url 'usuario_novo' %}">Registre-se</a>
                     </li>
                 {% endif %}
             </ul>
-        </div>
     </nav>
 </header>
 
 <main>
-    <div class="container">
         {% if messages %}
             <ul class="messages">
                 {% for message in messages %}
@@ -57,7 +64,6 @@
 
         {% block content %}
         {% endblock %}
-    </div>
 </main>
 
 </body>

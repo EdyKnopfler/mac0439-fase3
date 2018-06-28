@@ -1,6 +1,7 @@
 from usuarios.models import Usuario
 from django.db.models import Q
 from posts.models import Post, MarcadoNoPost
+from pets.models import Pet
 from django.shortcuts import render, redirect
 from eadopt.mongo import conectar_mongo
 from bson.objectid import ObjectId
@@ -69,7 +70,9 @@ def perfilOutros(request, user_id):
             aux = Tageados(pessoa.nome, pessoa.id)
             post.marcados += [aux]
 
-    return render(request, 'perfil.html', {"usuario":usuario, "descricao":descricao, "posts":posts, "editavel":owner})
+    pets = list(Pet.objects.filter(dono_id=usuario.id))
+
+    return render(request, 'perfil.html', {"usuario":usuario, "descricao":descricao, "posts":posts, "editavel":owner, "pets":pets})
 
 def posts(request):
     return postsOutros(request, request.session["usuario_id"])

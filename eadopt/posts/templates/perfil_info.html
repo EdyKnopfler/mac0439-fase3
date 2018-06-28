@@ -1,14 +1,13 @@
 {% load l10n %}
 {% csrf_token %}
 
-<h4><i>{{descricao}}</i></h4>
+<h4><i class="user-info-text">{{descricao}}</i></h4>
 </br>
-<p> <b>INFORMAÇÕES</b> </p>
-<p>{% if usuario.nome %}nome: {{usuario.nome}}{% endif %}</p>
-<p>{% if usuario.email %}email: {{usuario.email}}{% endif %}</p>
-<p>{% if usuario.rua %}rua: {{usuario.rua}}{% endif %}</p>
-<p>{% if usuario.bairro %}bairro: {{usuario.bairro}}{% endif %}</p>
-<p>{% if usuario.cidade %}cidade: {{usuario.cidade}}{% endif %}</p>
-<p>{% if usuario.estado %}estado: {{usuario.estado}}{% endif %}</p>
-<p>{% if usuario.cep %}cep: {{usuario.cep}}{% endif %}</p>
-<p>{% if usuario.telefone %}telefone: {{usuario.telefone}}{% endif %}</p>
+<p class="user-info-text">{% if usuario.nome %}<b>nome:</b> {{usuario.nome}}{% endif %}</p>
+<p class="user-info-text">{% if usuario.email %}<b>email:</b> {{usuario.email}}{% endif %}</p>
+<p class="user-info-text">{% if usuario.rua %}<b>rua:</b> {{usuario.rua}}{% endif %}</p>
+<p class="user-info-text">{% if usuario.bairro %}<b>bairro:</b> {{usuario.bairro}}{% endif %}</p>
+<p class="user-info-text">{% if usuario.cidade %}<b>cidade:</b> {{usuario.cidade}}{% endif %}</p>
+<p class="user-info-text">{% if usuario.estado %}<b>estado:</b> {{usuario.estado}}{% endif %}</p>
+<p class="user-info-text">{% if usuario.cep %}<b>cep:</b> {{usuario.cep}}{% endif %}</p>
+<p class="user-info-text">{% if usuario.telefone %}<b>telefone:</b> {{usuario.telefone}}{% endif %}</p>

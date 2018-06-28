@@ -1,0 +1,34 @@
+.meus-pets-div {
+  display: flex;
+  flex-direction: column;
+}
+
+.pet-list-div {
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+}
+
+.pet-div {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 10px;
+  word-break: break-all;
+}
+
+.pet-div-img {
+  border-radius: 50%;
+  border: 2px solid #8DCDC1;
+  width: 10vw;
+  max-width: 150px;
+  height: 10vw;
+  max-height: 150px;
+}
+
+.pet-div-name {
+  max-width: 10vw;
+  text-align: center;
+  font-size: 1.2em;
+  word-break: break-all;
+}
