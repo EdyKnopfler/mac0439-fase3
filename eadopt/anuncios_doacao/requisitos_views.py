@@ -1,13 +1,14 @@
 from django.shortcuts import render, redirect
 from bson.objectid import ObjectId
 
-from anuncios_doacao.models import Requisito
+from anuncios_doacao.models import AnuncioDoacao, Requisito
 from eadopt.mongo import conectar_mongo
 from autenticacao.autorizacao import *
 
 def requisitos(request, anuncio_id):
+    anuncio = AnuncioDoacao.objects.get(id=anuncio_id)
     requisitos = Requisito.objects.filter(anuncio_id=anuncio_id)
-    return render(request, 'requisitos/index.html', {'anuncio_id':anuncio_id, 'requisitos':requisitos})
+    return render(request, 'requisitos/index.html', {'anuncio':anuncio, 'requisitos':requisitos})
 
 
 def novo_requisito(request, anuncio_id):

@@ -2,9 +2,9 @@
 {% block content %}
 
  <div class="panel panel-default">
-     <div class="panel-heading"><strong>Requisitos do Anúncio</strong></div>
+     <div class="panel-heading"><strong>Requisitos do Anúncio: {{anuncio.pet.nome}}</strong></div>
      <div class="panel-body">
-         <p><a href="{% url 'requisito_novo' anuncio_id %}">Novo Requisito</a></p>
+         <p><a href="{% url 'requisito_novo' anuncio.id %}">Novo Requisito</a></p>
          {% for requisito in requisitos %}
             <p>
                 <b>{{requisito.titulo}}</b> <br>

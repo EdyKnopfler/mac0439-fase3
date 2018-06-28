@@ -24,13 +24,15 @@
             <tr>
                 <th>Candidato</th>
                 <th>Pontuação <br> (reqs. opcionais)</th>
+                <th></th>
             </tr>
             {% for r in ranking %}
             <tr> 
-                <td>{{r.2}}</td>
-                <td>{% if r.3 == None %} 0 {% else %} {{r.3}} {% endif %}</td>
+                <td>{{r.1}}</td>
+                <td>{% if r.2 == None %} 0 {% else %} {{r.2}} {% endif %}</td>
                 <td>
-                    <a href="">Doar</a>
+                    <a href="{% url 'anuncio_encerrar' r.0 %}" 
+                       onclick="return confirm('Confirma o encerramento do Anúncio e a doação de {{anuncio.pet.nome}} para {{r.1}}?')">Doar</a>
                 </td>
             </tr>
             {% endfor %}
