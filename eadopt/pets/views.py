@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from pets.models import Pet, Foto
 from usuarios.models import Usuario
+from visitas.models import Visita
 from django.contrib import messages
 from django.shortcuts import render, redirect
 from eadopt.mongo import conectar_mongo
@@ -57,6 +58,9 @@ def remover(request, pet_id):
     fotos = list(Foto.objects.filter(pet = pet))
     for foto in fotos:
         foto.delete()
+    visitas = list(Visita.objects.filter(pet = pet))
+    for visita in visitas:
+        visita.delete()
     pet.delete()
 
     return redirect('pets_index')

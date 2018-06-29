@@ -9,7 +9,7 @@
     <div class="pet-info-div">
       <p class="posts-title">{{pet.nome}}</p>
       <a href="{% url 'pet_editar' pet.id %}">Editar</a>
-      <a href="{% url 'visitas_remover' pet.id %}" onclick="return confirm('Tem certeza?')">Remover</a>
+      <a href="{% url 'pet_remover' pet.id %}" onclick="return confirm('Tem certeza?')">Remover</a>
       <p><b>Dono: </b>{{dono.nome}}</p>
       <p><b>Nome: </b>{{pet.nome}}</p>
       <p><b>Data de nascimento: </b>{{pet.data_nascimento}}</p>
