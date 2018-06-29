@@ -1,38 +1,52 @@
 {% extends 'base.html' %}
 {% block content %}
 
+{% load staticfiles %}
+<link rel="stylesheet" href="{% static 'styles/visita.css' %}">
+
 <h1> Visitas </h1>
+<p>
+  <a href="{% url 'visitas_criar' %}">Adicionar nova visita</a>  <br>
+</p>
+
 <div class="panel panel-default">
     <div class="panel-heading"><strong>Suas Visitas</strong></div>
     <div class="panel-body">
-      <p>
-        <a href="{% url 'visitas_criar' %}">Adicionar nova visita</a>  <br>
-      </p>
-      <p>
-        <ul>
-           {% for visita in visitas %}
-              <li ><a>{{visita.pet.nome}}, {{visita.data_hora}}</a>
-              <a href="{% url 'visitas_remover' visita.id %}" onclick="return confirm('Tem certeza?')">Remover</a></li>
-           {% endfor %}
-       </ul>
-     </p>
+      <div class="visitas-div">
+        {% for visita in visitas %}
+          <div class="visita-div">
+              <p><b>Visitando:</b> <a class="text-link" href="{% url 'pet_perfil' visita.pet.id %}">{{visita.pet.nome}}</a></p>
+              <p><b>Comentário:</b><br>{{visita.comentario}}</p>
+              <b>Data:</b> {{visita.data_hora}}
+              <a class="post-edit" href="{% url 'visitas_remover' visita.id %}" onclick="return confirm('Tem certeza?')">Remover</a>
+          </div>
+        {% endfor %}
+      </div>
    </div>
 </div>
 
 
 <div class="panel panel-default">
-  <div class="panel-heading"><strong>Seus Convites</strong></div>
+    <div class="panel-heading"><strong>Seus Convites</strong></div>
     <div class="panel-body">
-      <ul>
-          {% for convidado, convite in convites.items %}
-            {% for c in convite %}
-              <li>
-                <a>{{c.pet.nome}}, {{c.data_hora}}, {{c.visitante.nome}}</a>
-                <a href="{% url 'visitas_remover' c.id %}" onclick="return confirm('Tem certeza?')">Remover</a>
-              </li>
-            {% endfor %}
+      <div class="visitas-div">
+        {% for convidado, convite in convites.items %}
+          {% if convite %}
+          <div class="visita-div">
+        <p class="pet-convidado">{{convidado}}</p>
+      </div>
+        {% endif %}
+          {% for c in convite %}
+          <div class="visita-div">
+              <p><b>Visitante:</b> <a class="text-link" href="{% url 'perfil' %}{{c.visitante.id}}">{{c.visitante.nome}} </a></p>
+
+              <p><b>Comentário:</b><br>{{c.comentario}}</p>
+              <b>Data:</b> {{c.data_hora}}
+              <a class="post-edit" href="{% url 'visitas_remover' c.id %}" onclick="return confirm('Tem certeza?')">Remover</a>
+          </div>
           {% endfor %}
-      </ul>
+        {% endfor %}
+      </div>
     </div>
 </div>
 

@@ -1,0 +1,23 @@
+.visita-div {
+  padding: 5px 0 5px 0;
+  border-bottom: 1px solid #8DCDC1;
+}
+
+.visita.div:last-child {
+  border-bottom: 0px;
+}
+
+.pet-convidado {
+  font-weight: bold;
+  font-family: 'Open Sans', sans-serif;
+  font-size: 1.2em;
+  margin: 0;
+}
+
+.visita-div .text-link {
+  color: #000000;
+}
+
+.visita-div .text-link:hover {
+  color: #c44b22;
+}
