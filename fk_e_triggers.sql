@@ -4,16 +4,16 @@
 create or replace function CriarStatusParaTodosRequisitos()
 returns trigger as $$
 declare
-   requisito record;
+   req record;
 begin
-   for requisito in
+   for req in
       select * from requisito
       where anuncio_id = new.anuncio_id
    loop
       insert into status_requisito
           (titulo, status, anuncio_id, candidato_id)
       values
-          (requisito.titulo, 'a verificar', new.anuncio_id, new.candidato_id);
+          (req.titulo, 'a verificar', new.anuncio_id, new.candidato_id);
    end loop;
    return new;
 end;
