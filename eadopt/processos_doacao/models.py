@@ -10,6 +10,7 @@ class ProcessoDoacao(models.Model):
     data_termino = models.DateField(null=False)
     
     class Meta:
+        db_table = 'processo_doacao'
         unique_together = (('anuncio', 'candidato'),)
 
 class StatusRequisito(models.Model):
@@ -19,6 +20,7 @@ class StatusRequisito(models.Model):
     status = models.CharField(max_length=12, null=False, blank=False, default='a verificar')
     
     class Meta:
+        db_table = 'status_requisito'
         unique_together = (('anuncio', 'candidato', 'titulo'),)
 
 

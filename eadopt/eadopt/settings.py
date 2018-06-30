@@ -89,8 +89,8 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'fase3',
-        'USER': '.',
-        'PASSWORD': '.',
+        'USER': 'ederson',
+        'PASSWORD': 'jethrotull',
         'HOST': '127.0.0.1',
         'PORT': '5432',
         'ATOMIC_REQUESTS': True,

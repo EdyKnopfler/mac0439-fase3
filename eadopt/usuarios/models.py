@@ -14,11 +14,17 @@ class Usuario(models.Model):
    longitude = models.FloatField(null=True, blank=True)
    id_mongo = models.CharField(max_length=24, null=True, blank=True)
    tipo = models.CharField(max_length=2, null=False, blank=False, default="PF")
+   class Meta:
+       db_table = 'usuario'
 
 class PF(Usuario):
    cpf = models.CharField(max_length=11, unique=True)
    data_nascimento = models.DateField(null=True, blank=True)
+   class Meta:
+       db_table = 'pessoa_fisica'
    
 class PJ(Usuario):
    cnpj = models.CharField(max_length=14, unique=True)
+   class Meta:
+       db_table = 'pessoa_juridica'
    

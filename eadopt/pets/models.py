@@ -8,7 +8,11 @@ class Pet(models.Model):
     especie = models.CharField(max_length=80, null=False, blank=False)
     data_nascimento = models.DateField(null=True, blank=True)
     id_mongo = models.CharField(max_length=24, null=True, blank=True)
+    class Meta:
+       db_table = 'pet'
 
 class Foto(models.Model):
     pet = models.ForeignKey(Pet, on_delete=models.CASCADE)
     arquivo = models.FileField(blank=False, default = 'placeholder.jpg')
+    class Meta:
+       db_table = 'foto'

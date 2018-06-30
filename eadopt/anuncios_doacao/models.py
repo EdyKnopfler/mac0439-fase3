@@ -15,6 +15,9 @@ class AnuncioDoacao(models.Model):
     
     def prazo_encerrado(self):
         return date.today() > self.data_termino
+    
+    class Meta:
+       db_table = 'anuncio_doacao'
 
 class Requisito(models.Model):
     anuncio = models.ForeignKey(AnuncioDoacao, on_delete=models.CASCADE)
@@ -24,6 +27,7 @@ class Requisito(models.Model):
     peso = models.IntegerField(null=True)
     
     class Meta:
+        db_table = 'requisito'
         unique_together = (('anuncio', 'titulo'),)
     
     

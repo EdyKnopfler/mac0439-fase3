@@ -7,10 +7,10 @@ declare
    requisito record;
 begin
    for requisito in
-      select * from anuncios_doacao_requisito
+      select * from requisito
       where anuncio_id = new.anuncio_id
    loop
-      insert into processos_doacao_statusrequisito
+      insert into status_requisito
           (titulo, status, anuncio_id, candidato_id)
       values
           (requisito.titulo, 'a verificar', new.anuncio_id, new.candidato_id);
@@ -19,10 +19,10 @@ begin
 end;
 $$ language plpgsql;
 
-drop trigger if exists InserirStatusTodosRequisitos ON processos_doacao_processodoacao;
+drop trigger if exists InserirStatusTodosRequisitos ON processo_doacao;
 
 create trigger InserirStatusTodosRequisitos
-after insert on processos_doacao_processodoacao
+after insert on processo_doacao
 for each row
 execute procedure CriarStatusParaTodosRequisitos();
 
@@ -35,10 +35,10 @@ declare
    processo record;
 begin
    for processo in
-      select * from processos_doacao_processodoacao
+      select * from processo_doacao
       where anuncio_id = new.anuncio_id
    loop
-      insert into processos_doacao_statusrequisito
+      insert into status_requisito
           (titulo, status, anuncio_id, candidato_id)
       values
           (new.titulo, 'a verificar', new.anuncio_id, processo.candidato_id);
@@ -47,22 +47,22 @@ begin
 end;
 $$ language plpgsql;
 
-drop trigger if exists InserirStatusNovoRequisito ON anuncios_doacao_requisito;
+drop trigger if exists InserirStatusNovoRequisito ON requisito;
 
 create trigger InserirStatusNovoRequisito
-after insert on anuncios_doacao_requisito
+after insert on requisito
 for each row
 execute procedure CriarStatusParaNovoRequisito();
 
 -- Ao excluir um *Requisito*
 -- excluir também todos os *Status de Requisito*
-alter table processos_doacao_statusrequisito
+alter table status_requisito
 add foreign key(anuncio_id, titulo) 
-references anuncios_doacao_requisito(anuncio_id, titulo) ON DELETE CASCADE ON UPDATE CASCADE;
+references requisito(anuncio_id, titulo) ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- Ao excluir um *Processo de Doação*
 -- excluir também todos os *Status de Requisitos*
-alter table processos_doacao_statusrequisito
+alter table status_requisito
 add foreign key(anuncio_id, candidato_id) 
-references processos_doacao_processodoacao(anuncio_id, candidato_id) ON DELETE CASCADE;
+references processo_doacao(anuncio_id, candidato_id) ON DELETE CASCADE;
 
