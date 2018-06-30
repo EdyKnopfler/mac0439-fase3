@@ -66,16 +66,16 @@ def consulta_ranking(anuncio_id):
         select
             proc.id, usu.nome, sum(req.peso) as pontuacao
         from 
-            processos_doacao_processodoacao proc
-            join processos_doacao_statusrequisito status on 
+            processo_doacao proc
+            join status_requisito status on 
                 proc.anuncio_id = status.anuncio_id and 
                 proc.candidato_id = status.candidato_id and
                 status.status = 'cumprido'
-            left join anuncios_doacao_requisito req on
+            left join requisito req on
                 req.anuncio_id = status.anuncio_id and 
                 req.titulo = status.titulo and
                 req.tipo = 'Opcional'
-            join usuarios_usuario usu
+            join usuario usu
                 on proc.candidato_id = usu.id
         where 
             proc.anuncio_id = %s and  -- FILTRO!!
@@ -85,18 +85,18 @@ def consulta_ranking(anuncio_id):
                 select
                     p.id
                 from 
-                    processos_doacao_processodoacao p
-                    join processos_doacao_statusrequisito s on
+                    processo_doacao p
+                    join status_requisito s on
                         p.anuncio_id = s.anuncio_id and 
                         p.candidato_id = s.candidato_id and
                         s.status = 'cumprido'
-                    join anuncios_doacao_requisito r on
+                    join requisito r on
                         r.anuncio_id = s.anuncio_id and 
                         r.titulo = s.titulo and
                         r.tipo = 'Obrigatório'
                 group by p.id
                 having count(*) = (
-                    select count(*) from anuncios_doacao_requisito
+                    select count(*) from requisito
                     where anuncio_id = proc.anuncio_id and tipo = 'Obrigatório'
                 )
 
