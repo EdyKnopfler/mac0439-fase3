@@ -17,6 +17,15 @@
       <p><b>Descrição: </b>{{pet.descricao}}</p>
     </div>
     <hr>
+    <div>
+      <p class="posts-title"> Ficha: </p>
+      {% for f in ficha %}
+          {% for chave, valor in f.items%}
+          <p><b>{{chave}}:</b> {{valor}}</p>
+          {%endfor%}
+        {%endfor%}
+    </div>
+    <hr>
     <div class="pet-gallery-div">
       <div>
         {% for f in fotos %}

@@ -1,6 +1,9 @@
 {% load l10n %}
 {% csrf_token %}
 
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/jquery-ui.min.js" type="text/javascript"></script>
+
  <p>
  Nome: <br>
  <input type="text" name="nome" maxlength="80" value="{{pet.nome}}">
@@ -30,10 +33,43 @@ Fotos: <br>
 <input name="clear_file" type="button" value="Cancelar upload" onclick="clearFile();" />
  </p>
 
+ <p>
+ 	 <div id="ChaveValor">
+   {% for chave, valor in ChaveValor.items %}
+     <input type="checkbox" name = "chavevalor" value = "{{chave}}:{{valor}}" checked onclick = "apagar();"> <label id = "{{chave}}:{{valor}}">{{chave}} : {{valor}}</label> </input>
+   {% endfor %}
+ </div>
+ 	Ficha do Pet:<br>
+ 	<input type="text" name="chave" id="chave"> :
+ 	<input type="text" name="valor" id="valor">
+
+ 	   <input id="clickMe" type="button" value="Adicionar na Ficha" onclick="Add();" />
+ </p>
+
+
  <script type="text/javascript">
 
     function clearFile(){
       var arq = document.getElementsByName("arquivo");
       arq[0].value = "";
+    }
+
+
+    function Add() {
+      var chave = $('input[id="chave"]').val();
+      var valor = $('input[id="valor"]').val();
+      $("#ChaveValor").append($( "<input type = \"checkbox\" checked value=\""+ chave + ":" + valor +"\" name=\"chavevalor\" onclick = \"apagar();\"><label name = \""+ chave + ":" + valor +"\">"+ chave + " : " + valor +"</label></input>"));
+    }
+
+    function apagar() {
+      var checkboxes = document.getElementsByName('chavevalor');
+      for (var i = 0; i < checkboxes.length; i++){
+        var checkbox = checkboxes[i];
+        if(!checkbox.checked){
+          // var nome = checkbox.attr("value");
+          checkbox.nextElementSibling.remove();
+          checkbox.parentNode.removeChild(checkbox);
+        }
+      }
     }
 </script>
