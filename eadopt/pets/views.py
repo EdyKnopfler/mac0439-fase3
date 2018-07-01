@@ -21,12 +21,12 @@ def novo(request):
 
 def editar(request, pet_id):
     pet = Pet.objects.get(id=pet_id)
-    descricao = conectar_mongo().pets.find_one({"_id": ObjectId(pet.id_mongo)})
-    pet.descricao = descricao["descricao"]
+    mongo_pet = conectar_mongo().pets.find_one({"_id": ObjectId(pet.id_mongo)})
+    pet.descricao = mongo_pet["descricao"]
     request.session['pet_mongo_id'] = pet.id_mongo
     request.session['pet_id'] = pet.id
     fotos = Foto.objects.filter(pet_id = pet.id)
-    return render (request, 'editar_pet.html', {"pet": pet, "fotos":fotos})
+    return render (request, 'editar_pet.html', {"pet": pet, "fotos":fotos, 'ficha':mongo_pet["ficha"]})
 
 def atualizar(request):
     pet = preencher(request)
@@ -48,9 +48,19 @@ def atualizar(request):
         e = sys.exc_info()
         print("erro!")
         print(e)
-    conectar_mongo().pets.update_one({"_id": ObjectId(request.session['pet_mongo_id'])}, {
-        "$set": {'nome':request.POST['nome'], 'descricao': request.POST['descricao']}
+    
+    ficha = set(request.POST.getlist('chavevalor'))
+    ficha_texto = ''
+    for cada_campo in ficha:
+        ficha_texto += cada_campo + '; '
+    pets = conectar_mongo().pets
+    id_mongo = ObjectId(request.session['pet_mongo_id'])
+    conectar_mongo().pets.update_one({"_id": id_mongo}, {
+        "$set": {'nome':request.POST['nome'], 'descricao':request.POST['descricao'], 'ficha':[], 'ficha_texto':ficha_texto}
     })
+    for cada_campo in ficha:
+        ChaveValor = cada_campo.split(":")
+        pets.update({ '_id': id_mongo}, {'$push':{'ficha': {ChaveValor[0]: ChaveValor[1]}}})
     return redirect ('pets_index')
 
 def remover(request, pet_id):
@@ -97,17 +107,20 @@ def criar(request):
         e = sys.exc_info()
         print("erro!")
         print(e)
-    db = conectar_mongo()
-    sitedb = db.pets
-    resultado = conectar_mongo().pets.insert_one({
+    ficha_texto = ''
+    for cada_campo in ficha:
+        ficha_texto += cada_campo + '; '
+    pets = conectar_mongo().pets
+    resultado = pets.insert_one({
         'id_postgres': novo_pet.id,
         'nome': novo_pet.nome,
         'descricao': request.POST['descricao'],
-        'ficha' : []
+        'ficha' : [],
+        'ficha_texto': ficha_texto
         })
     for cada_campo in ficha:
         ChaveValor = cada_campo.split(":")
-        conectar_mongo().pets.update({ '_id': resultado.inserted_id}, {'$push':{'ficha': {ChaveValor[0]: ChaveValor[1]}}})
+        pets.update({ '_id': resultado.inserted_id}, {'$push':{'ficha': {ChaveValor[0]: ChaveValor[1]}}})
 
     novo_pet.id_mongo = str(resultado.inserted_id)
     novo_pet.save()

@@ -35,8 +35,10 @@ Fotos: <br>
 
  <p>
  	 <div id="ChaveValor">
-   {% for chave, valor in ChaveValor.items %}
+   {% for f in ficha %}
+   {% for chave, valor in f.items %}
      <input type="checkbox" name = "chavevalor" value = "{{chave}}:{{valor}}" checked onclick = "apagar();"> <label id = "{{chave}}:{{valor}}">{{chave}} : {{valor}}</label> </input>
+   {% endfor %}
    {% endfor %}
  </div>
  	Ficha do Pet:<br>
